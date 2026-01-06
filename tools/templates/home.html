@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if page_title %}{{ page_title }}{% else %}NovelVibe - Free Novel Online | Read Light Novels, Romance & More{% endif %}</title>
-    <meta name="description" content="{% if page_description %}{{ page_description }}{% else %}Read free novels online! Discover thousands of light novels, romance novels, and graphic novels. Get daily novel updates. Start reading your favorite novels now - completely free, no registration required.{% endif %}">
-    <meta name="keywords" content="free novel online, light novel, apothecary diaries light novel, heavens official blessing novel, dune novel, novel updates, romance novel, graphic novel, school spirits graphic novel, visual novel, novel master, novel synonym, how many words in a novel, read novel free, online novel, free novels, werewolf novels, paranormal romance">
-    <meta name="robots" content="index, follow">
+    <title>{% if page_title %}{{ page_title }}{% else %}NovelVibe - Free Novels for Women{% endif %}</title>
+    <meta name="description" content="{% if page_description %}{{ page_description }}{% else %}Discover thousands of free werewolf romance novels. Read passionate alpha stories, mate bonds, and pack adventures. Perfect for women who love paranormal romance.{% endif %}">
+    <meta name="keywords" content="free werewolf novels, alpha romance, mate bond stories, paranormal romance, werewolf fiction, free books for women">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="{% if page_title %}{{ page_title }}{% else %}NovelVibe - Free Novels for Women{% endif %}">
@@ -20,136 +19,65 @@
     <meta name="twitter:title" content="{% if page_title %}{{ page_title }}{% else %}NovelVibe{% endif %}">
     <meta name="twitter:description" content="{% if page_description %}{{ page_description }}{% else %}Free werewolf romance novels{% endif %}">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ canonical_url }}">
     
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KM9R2XBQSL"></script>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKK2QRZ5GC"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      gtag('config', 'G-YKK2QRZ5GC');
+    </script>
+    
+    <!-- Google AdSense
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8873012348232644"
+         crossorigin="anonymous"></script> -->
+    
 
-      gtag('config', 'G-KM9R2XBQSL');
-    </script>
-    
-    <!-- Page Visit Statistics Code -->
+
+    <!-- Facebook Pixel Code -->
     <script>
-    // Page visit data collection
-    function sendPageVisit() {
-        // First get user IP address
-        getUserIP().then(userIP => {
-            const data = {
-                page: window.location.href,
-                userAgent: navigator.userAgent,
-                userIP: userIP,
-                referrer: getReferrerSource()
-            };
-            
-            // Send data to Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbyF5Vot_R9Rq_hoZmcPeK_-2rY9tPphz9jLsru1KX7z-krv7-LIJ90fFHSJ0tNJbPQX/exec', {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            }).catch(error => {
-                console.log('Analytics error:', error);
-            });
-        }).catch(error => {
-            // If IP retrieval fails, still send other data
-            const data = {
-                page: window.location.href,
-                userAgent: navigator.userAgent,
-                userIP: 'Unknown',
-                referrer: getReferrerSource()
-            };
-            
-            fetch('https://script.google.com/macros/s/AKfycbyF5Vot_R9Rq_hoZmcPeK_-2rY9tPphz9jLsru1KX7z-krv7-LIJ90fFHSJ0tNJbPQX/exec', {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            }).catch(error => {
-                console.log('Analytics error:', error);
-            });
-        });
-    }
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '835106315764533');
     
-    // Get referrer source (traffic source detection)
-    function getReferrerSource() {
-        const referrer = document.referrer || '';
-        const urlParams = new URLSearchParams(window.location.search);
+    // Natural 72-hour event tracking prevention (resets every 3 days)
+    function shouldTrackEvent(eventName) {
+        const now = new Date();
+        const threeDaysAgo = new Date(now.getTime() - (3 * 24 * 60 * 60 * 1000));
+        const currentPeriod = Math.floor(now.getTime() / (3 * 24 * 60 * 60 * 1000));
+        const storageKey = `fb_event_${eventName}`;
+        const lastTrackedPeriod = localStorage.getItem(storageKey);
         
-        if (urlParams.has('utm_source')) return 'Campaign: ' + urlParams.get('utm_source');
-        if (urlParams.has('fbclid')) return 'Facebook Ads';
-        if (urlParams.has('gclid')) return 'Google Ads';
-        if (!referrer) return 'Direct Traffic';
+        if (!lastTrackedPeriod || parseInt(lastTrackedPeriod) !== currentPeriod) {
+            localStorage.setItem(storageKey, currentPeriod.toString());
+            return true;
+        }
         
-        try {
-            const refUrl = new URL(referrer);
-            const refHost = refUrl.hostname.toLowerCase();
-            if (refHost.includes('google.')) return 'Google Search';
-            if (refHost.includes('facebook.com') || refHost.includes('fb.com')) return 'Facebook';
-            if (refHost.includes('instagram.com')) return 'Instagram';
-            if (refHost.includes('twitter.com') || refHost.includes('t.co')) return 'Twitter/X';
-            if (refHost.includes('tiktok.com')) return 'TikTok';
-            if (refHost.includes('bing.com')) return 'Bing Search';
-            if (refHost.includes('yahoo.com')) return 'Yahoo Search';
-            if (refHost.includes('reddit.com')) return 'Reddit';
-            if (refHost.includes('pinterest.com')) return 'Pinterest';
-            if (refHost === window.location.hostname) return 'Internal Navigation';
-            return 'Referral: ' + refHost;
-        } catch (e) {
-            return 'Unknown Referrer';
-        }
+        return false;
     }
     
-    // Get user IP address
-    async function getUserIP() {
-        try {
-            // Method 1: Use free IP API
-            const response = await fetch('https://api.ipify.org?format=json');
-            const ipData = await response.json();
-            return ipData.ip;
-        } catch (error1) {
-            try {
-                // Method 2: Backup IP API
-                const response = await fetch('https://httpbin.org/ip');
-                const ipData = await response.json();
-                return ipData.origin.split(',')[0].trim();
-            } catch (error2) {
-                try {
-                    // Method 3: Third backup API
-                    const response = await fetch('https://jsonip.com');
-                    const ipData = await response.json();
-                    return ipData.ip;
-                } catch (error3) {
-                    console.log('IP retrieval failed, using Unknown');
-                    return 'Unknown';
-                }
-            }
-        }
-    }
-    
-    // Send visit data after page load
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', sendPageVisit);
+    // Track PageView with 72-hour prevention
+    if (shouldTrackEvent('PageView_Home')) {
+        fbq('track', 'PageView');
+        console.log('Facebook事件已发送: PageView (首页浏览)');
     } else {
-        sendPageVisit();
+        console.log('Facebook事件已跳过: PageView_Home (本72小时内已发送)');
     }
     </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=835106315764533&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -671,9 +599,6 @@
             }
         }
     </style>
-    
-    <!-- Ahrefs Analytics -->
-    <script src="https://analytics.ahrefs.com/analytics.js" data-key="E2ZZe80dfDLAEGhT2iI37A" async></script>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -888,73 +813,6 @@
     </footer>
 
     <script>
-        // URL参数传递系统 - 保持Facebook追踪参数在页面导航中传递
-        (function() {
-            // 从当前URL提取追踪参数
-            function getTrackingParams() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const trackingParams = {};
-                
-                // Facebook 点击ID
-                if (urlParams.has('fbclid')) {
-                    trackingParams.fbclid = urlParams.get('fbclid');
-                }
-                
-                // UTM 参数
-                const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
-                utmParams.forEach(param => {
-                    if (urlParams.has(param)) {
-                        trackingParams[param] = urlParams.get(param);
-                    }
-                });
-                
-                // 其他常见追踪参数
-                const otherParams = ['gclid', 'msclkid', 'ref', 'source'];
-                otherParams.forEach(param => {
-                    if (urlParams.has(param)) {
-                        trackingParams[param] = urlParams.get(param);
-                    }
-                });
-                
-                return trackingParams;
-            }
-            
-            // 将追踪参数转换为查询字符串
-            function paramsToQueryString(params) {
-                const entries = Object.entries(params);
-                if (entries.length === 0) return '';
-                return entries.map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
-            }
-            
-            // 给URL添加追踪参数
-            function addTrackingParamsToUrl(url, trackingParams) {
-                if (Object.keys(trackingParams).length === 0) return url;
-                
-                const separator = url.includes('?') ? '&' : '?';
-                const queryString = paramsToQueryString(trackingParams);
-                return url + separator + queryString;
-            }
-            
-            // 页面加载后处理所有链接
-            document.addEventListener('DOMContentLoaded', function() {
-                const trackingParams = getTrackingParams();
-                
-                if (Object.keys(trackingParams).length > 0) {
-                    // 选择所有站内链接
-                    const internalLinks = document.querySelectorAll('a[href^="/"], a[href^="./"], a[href^="../"]');
-                    
-                    internalLinks.forEach(link => {
-                        const href = link.getAttribute('href');
-                        if (href) {
-                            link.setAttribute('href', addTrackingParamsToUrl(href, trackingParams));
-                        }
-                    });
-                    
-                    console.log('追踪参数已应用到所有站内链接:', trackingParams);
-                }
-            });
-        })();
-        
         // Category filter functionality
         document.addEventListener('DOMContentLoaded', function() {
             const filterButtons = document.querySelectorAll('.filter-btn');

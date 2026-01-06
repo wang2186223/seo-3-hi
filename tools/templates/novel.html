@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if novel.title %}{{ novel.title }} - Free Novel Online | Read Light Novel - NovelVibe{% else %}Book Details - Free Novel Online - NovelVibe{% endif %}</title>
+    <meta charset=    // Natural 72-hour event    // Track PageView with 72-hour prevention
+    if (shouldTrackEvent('PageView_Novel')) {
+        fbq('track', 'PageView');
+        console.log('Facebook事件已发送: PageView (小说介绍页浏览)');
+    } else {
+        console.log('Facebook事件已跳过: PageView_Novel (本72小时内已发送)');
+    }ng prevention (resets every 3 days)
+    function shouldTrackEvent(eventName) {
+        const now = new Date();
+        const threeDaysAgo = new Date(now.getTime() - (3 * 24 * 60 * 60 * 1000));
+        const currentPeriod = Math.floor(now.getTime() / (3 * 24 * 60 * 60 * 1000));
+        const storageKey = `fb_event_${eventName}`;
+        const lastTrackedPeriod = localStorage.getItem(storageKey);
+        
+        if (!lastTrackedPeriod || parseInt(lastTrackedPeriod) !== currentPeriod) {
+            localStorage.setItem(storageKey, currentPeriod.toString());
+            return true;
+        }
+        
+        return false;
+    }meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if novel.title %}{{ novel.title }} - NovelVibe{% else %}Book Details - NovelVibe{% endif %}</title>
     <meta name="description" content="{% if novel.description %}{{ novel.description }}{% else %}Read free werewolf romance novels on NovelVibe{% endif %}">
-    <meta name="keywords" content="free novel online, {% if novel.tags %}{{ novel.tags|join(', ') }}, {% endif %}light novel, apothecary diaries light novel, heavens official blessing novel, dune novel, novel updates, read novel free, romance novel, graphic novel, school spirits graphic novel, visual novel, novel master, novel synonym, how many words in a novel, online novel, free novels">
-    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="{% if novel.tags %}{{ novel.tags|join(', ') }}{% else %}werewolf, romance, free novels{% endif %}">
     
     <!-- Time Meta Tags for SEO -->
     {% if timestamps %}
@@ -28,42 +46,81 @@
     <meta name="twitter:title" content="{% if novel.title %}{{ novel.title }}{% else %}Book Details{% endif %}">
     <meta name="twitter:description" content="{% if novel.description %}{{ novel.description }}{% else %}Free werewolf romance novels{% endif %}">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ canonical_url }}">
     
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KM9R2XBQSL"></script>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKK2QRZ5GC"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
-      gtag('config', 'G-KM9R2XBQSL');
+      gtag('config', 'G-YKK2QRZ5GC');
     </script>
     
-    <!-- Page Visit Statistics Code -->
+    <!-- Google AdSense
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8873012348232644"
+         crossorigin="anonymous"></script> -->
+    
+
+
+    <!-- Facebook Pixel Code -->
     <script>
-    // Page visit data collection
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '835106315764533');
+    
+    // Natural 72-hour event tracking prevention (resets every 3 days)
+    function shouldTrackEvent(eventName) {
+        const now = new Date();
+        const threeDaysAgo = new Date(now.getTime() - (3 * 24 * 60 * 60 * 1000));
+        const currentPeriod = Math.floor(now.getTime() / (3 * 24 * 60 * 60 * 1000));
+        const storageKey = `fb_event_${eventName}`;
+        const lastTrackedPeriod = localStorage.getItem(storageKey);
+        
+        if (!lastTrackedPeriod || parseInt(lastTrackedPeriod) !== currentPeriod) {
+            localStorage.setItem(storageKey, currentPeriod.toString());
+            return true;
+        }
+        
+        return false;
+    }
+    
+    // Track PageView with 24-hour prevention
+    if (shouldTrackEvent('PageView_Novel')) {
+        fbq('track', 'PageView');
+        console.log('Facebook事件已发送: PageView (小说介绍页浏览)');
+    } else {
+        console.log('Facebook事件已跳过: PageView_Novel (今日已发送)');
+    }
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=835106315764533&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
+    
+    <!-- 页面访问统计代码 -->
+    <script>
+    // 页面访问数据收集
     function sendPageVisit() {
-        // First get user IP address
+        // 先获取用户IP地址
         getUserIP().then(userIP => {
             const data = {
                 page: window.location.href,
                 userAgent: navigator.userAgent,
-                userIP: userIP,
-                referrer: getReferrerSource()
+                referrer: document.referrer || 'direct',
+                userIP: userIP
             };
             
-            // Send data to Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbyF5Vot_R9Rq_hoZmcPeK_-2rY9tPphz9jLsru1KX7z-krv7-LIJ90fFHSJ0tNJbPQX/exec', {
+            // 发送数据到 Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbxuCd58gcBzU-T_ipn7HWCrOM3Mex1c3PiHc8FmFIUe6Zm_KxSbkrsgOwyEgWYm1fsEdQ/exec', {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
@@ -74,15 +131,15 @@
                 console.log('Analytics error:', error);
             });
         }).catch(error => {
-            // If IP retrieval fails, still send other data
+            // 如果获取IP失败，仍发送其他数据
             const data = {
                 page: window.location.href,
                 userAgent: navigator.userAgent,
-                userIP: 'Unknown',
-                referrer: getReferrerSource()
+                referrer: document.referrer || 'direct',
+                userIP: 'Unknown'
             };
             
-            fetch('https://script.google.com/macros/s/AKfycbyF5Vot_R9Rq_hoZmcPeK_-2rY9tPphz9jLsru1KX7z-krv7-LIJ90fFHSJ0tNJbPQX/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbxuCd58gcBzU-T_ipn7HWCrOM3Mex1c3PiHc8FmFIUe6Zm_KxSbkrsgOwyEgWYm1fsEdQ/exec', {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
@@ -95,63 +152,34 @@
         });
     }
     
-    // Get referrer source (traffic source detection)
-    function getReferrerSource() {
-        const referrer = document.referrer || '';
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        if (urlParams.has('utm_source')) return 'Campaign: ' + urlParams.get('utm_source');
-        if (urlParams.has('fbclid')) return 'Facebook Ads';
-        if (urlParams.has('gclid')) return 'Google Ads';
-        if (!referrer) return 'Direct Traffic';
-        
-        try {
-            const refUrl = new URL(referrer);
-            const refHost = refUrl.hostname.toLowerCase();
-            if (refHost.includes('google.')) return 'Google Search';
-            if (refHost.includes('facebook.com') || refHost.includes('fb.com')) return 'Facebook';
-            if (refHost.includes('instagram.com')) return 'Instagram';
-            if (refHost.includes('twitter.com') || refHost.includes('t.co')) return 'Twitter/X';
-            if (refHost.includes('tiktok.com')) return 'TikTok';
-            if (refHost.includes('bing.com')) return 'Bing Search';
-            if (refHost.includes('yahoo.com')) return 'Yahoo Search';
-            if (refHost.includes('reddit.com')) return 'Reddit';
-            if (refHost.includes('pinterest.com')) return 'Pinterest';
-            if (refHost === window.location.hostname) return 'Internal Navigation';
-            return 'Referral: ' + refHost;
-        } catch (e) {
-            return 'Unknown Referrer';
-        }
-    }
-    
-    // Get user IP address
+    // 获取用户IP地址
     async function getUserIP() {
         try {
-            // Method 1: Use free IP API
+            // 方法1：使用免费的IP API
             const response = await fetch('https://api.ipify.org?format=json');
             const ipData = await response.json();
             return ipData.ip;
         } catch (error1) {
             try {
-                // Method 2: Backup IP API
+                // 方法2：备用IP API
                 const response = await fetch('https://httpbin.org/ip');
                 const ipData = await response.json();
                 return ipData.origin.split(',')[0].trim();
             } catch (error2) {
                 try {
-                    // Method 3: Third backup API
+                    // 方法3：第三个备用API
                     const response = await fetch('https://jsonip.com');
                     const ipData = await response.json();
                     return ipData.ip;
                 } catch (error3) {
-                    console.log('IP retrieval failed, using Unknown');
+                    console.log('获取IP失败，使用Unknown');
                     return 'Unknown';
                 }
             }
         }
     }
     
-    // Send visit data after page load
+    // 页面加载完成后发送访问数据
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', sendPageVisit);
     } else {
@@ -661,89 +689,6 @@
     }
     </script>
     {% endif %}
-    
-    <!-- Breadcrumb Navigation Schema -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": "{{ site_url }}/"
-            },
-            {
-                "@type": "ListItem",
-                "position": 2,
-                "name": "{{ novel.title }}",
-                "item": "{{ canonical_url }}"
-            }
-        ]
-    }
-    </script>
-    
-    <!-- FAQ Schema for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "What is a novel?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A novel is a long narrative work of fiction. {{ novel.title }} is available as a free novel online on NovelVibe. We offer various types including light novels (like Apothecary Diaries light novel, Heaven's Official Blessing novel), romance novels, graphic novels (School Spirits, Forever), visual novels, and classics like Dune novel."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Can I read {{ novel.title }} free online?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes! {{ novel.title }} is completely free to read online at NovelVibe. All {{ novel.total_chapters }} chapters are available without registration. Start reading this free novel online now. We're your novel master for unlimited reading."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How many words in a novel?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A typical novel contains 50,000-100,000 words. {{ novel.title }} with {{ novel.total_chapters }} chapters offers substantial content. Light novels average 40,000-50,000 words, while epic novels like Dune can exceed 120,000 words."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "How many chapters does {{ novel.title }} have?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "{{ novel.title }} currently has {{ novel.total_chapters }} chapters available to read free online. Check back regularly for novel updates and new chapters from our novel master collection."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is a graphic novel?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "A graphic novel is a book-length comic narrative. Popular examples include School Spirits graphic novel and Forever graphic novel. While {{ novel.title }} is a text-based novel, our platform offers various free novels online including romance novels, light novels, and visual novels."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What are novel synonyms?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Novel synonyms include: book, story, fiction, narrative, tale, romance, literature, work. {{ novel.title }} represents quality fiction available as a free novel online on our novel master platform."
-                }
-            }
-        ]
-    }
-    </script>
-    
-    <!-- Ahrefs Analytics -->
-    <script src="https://analytics.ahrefs.com/analytics.js" data-key="E2ZZe80dfDLAEGhT2iI37A" async></script>
 </head>
 <body>
     <!-- 顶部导航 -->
@@ -889,72 +834,109 @@
     </div>
 
     <script>
-        // URL参数传递系统 - 保持Facebook追踪参数在页面导航中传递
-        (function() {
-            // 从当前URL提取追踪参数
-            function getTrackingParams() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const trackingParams = {};
-                
-                // Facebook 点击ID
-                if (urlParams.has('fbclid')) {
-                    trackingParams.fbclid = urlParams.get('fbclid');
-                }
-                
-                // UTM 参数
-                const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
-                utmParams.forEach(param => {
-                    if (urlParams.has(param)) {
-                        trackingParams[param] = urlParams.get(param);
-                    }
-                });
-                
-                // 其他常见追踪参数
-                const otherParams = ['gclid', 'msclkid', 'ref', 'source'];
-                otherParams.forEach(param => {
-                    if (urlParams.has(param)) {
-                        trackingParams[param] = urlParams.get(param);
-                    }
-                });
-                
-                return trackingParams;
-            }
+        // ===== Facebook Tracking Parameters Preservation System =====
+        
+        const TRACKING_PARAMS = [
+            'fbclid', 'utm_source', 'utm_medium', 'utm_campaign', 
+            'utm_term', 'utm_content', 'utm_id', 'gclid', 'msclkid', 'ttclid'
+        ];
+        
+        function extractTrackingParams(url) {
+            const urlObj = new URL(url, window.location.origin);
+            const params = {};
+            let hasParams = false;
             
-            // 将追踪参数转换为查询字符串
-            function paramsToQueryString(params) {
-                const entries = Object.entries(params);
-                if (entries.length === 0) return '';
-                return entries.map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
-            }
-            
-            // 给URL添加追踪参数
-            function addTrackingParamsToUrl(url, trackingParams) {
-                if (Object.keys(trackingParams).length === 0) return url;
-                
-                const separator = url.includes('?') ? '&' : '?';
-                const queryString = paramsToQueryString(trackingParams);
-                return url + separator + queryString;
-            }
-            
-            // 页面加载后处理所有链接
-            document.addEventListener('DOMContentLoaded', function() {
-                const trackingParams = getTrackingParams();
-                
-                if (Object.keys(trackingParams).length > 0) {
-                    // 选择所有站内链接
-                    const internalLinks = document.querySelectorAll('a[href^="/"], a[href^="./"], a[href^="../"]');
-                    
-                    internalLinks.forEach(link => {
-                        const href = link.getAttribute('href');
-                        if (href) {
-                            link.setAttribute('href', addTrackingParamsToUrl(href, trackingParams));
-                        }
-                    });
-                    
-                    console.log('追踪参数已应用到所有站内链接:', trackingParams);
+            TRACKING_PARAMS.forEach(param => {
+                const value = urlObj.searchParams.get(param);
+                if (value) {
+                    params[param] = value;
+                    hasParams = true;
                 }
             });
-        })();
+            
+            return hasParams ? params : null;
+        }
+        
+        function saveCurrentTrackingParams() {
+            const currentParams = extractTrackingParams(window.location.href);
+            
+            if (currentParams) {
+                localStorage.setItem('trackingParams', JSON.stringify(currentParams));
+                localStorage.setItem('trackingParamsTimestamp', Date.now().toString());
+                console.log('📊 [小说页] 保存新的追踪参数:', currentParams);
+                return true;
+            }
+            
+            return false;
+        }
+        
+        function getStoredTrackingParams() {
+            try {
+                const paramsStr = localStorage.getItem('trackingParams');
+                const timestamp = localStorage.getItem('trackingParamsTimestamp');
+                
+                if (!paramsStr || !timestamp) return null;
+                
+                const age = Date.now() - parseInt(timestamp);
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+                
+                if (age > twentyFourHours) {
+                    localStorage.removeItem('trackingParams');
+                    localStorage.removeItem('trackingParamsTimestamp');
+                    return null;
+                }
+                
+                return JSON.parse(paramsStr);
+            } catch (error) {
+                return null;
+            }
+        }
+        
+        function addTrackingParams(url) {
+            try {
+                const urlObj = new URL(url, window.location.origin);
+                
+                const hasExistingParams = TRACKING_PARAMS.some(param => 
+                    urlObj.searchParams.has(param)
+                );
+                
+                if (hasExistingParams) {
+                    return url;
+                }
+                
+                const storedParams = getStoredTrackingParams();
+                
+                if (storedParams) {
+                    Object.keys(storedParams).forEach(key => {
+                        urlObj.searchParams.set(key, storedParams[key]);
+                    });
+                    return urlObj.toString();
+                }
+                
+                return url;
+            } catch (error) {
+                return url;
+            }
+        }
+        
+        function initTrackingSystem() {
+            saveCurrentTrackingParams();
+            
+            // 为所有章节链接添加追踪参数
+            document.querySelectorAll('a[href*="/chapter-"]').forEach(link => {
+                if (link.href) {
+                    const originalHref = link.href;
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = addTrackingParams(originalHref);
+                    });
+                }
+            });
+            
+            console.log('📊 [小说页] 追踪参数系统已初始化');
+        }
+        
+        document.addEventListener('DOMContentLoaded', initTrackingSystem);
         
         // 阅读历史记录管理
         document.addEventListener('DOMContentLoaded', function() {

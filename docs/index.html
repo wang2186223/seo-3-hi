@@ -6,63 +6,103 @@
     <title>NovelVibe - Free Novels for Women</title>
     <meta name="description" content="Discover thousands of free werewolf romance novels. Read passionate alpha stories, mate bonds, and pack adventures. Perfect for women who love paranormal romance.">
     <meta name="keywords" content="free werewolf novels, alpha romance, mate bond stories, paranormal romance, werewolf fiction, free books for women">
-    <meta name="robots" content="index, follow">
     
     <!-- Time Meta Tags for SEO -->
     
-    <meta property="article:published_time" content="2025-11-28T13:38:07.100024">
-    <meta property="article:modified_time" content="2025-11-28T13:38:07.100024">
-    <meta name="date" content="2025-11-28">
-    <meta name="last-modified" content="2025-11-28 13:38:07">
+    <meta property="article:published_time" content="2026-01-06T15:46:13.039450">
+    <meta property="article:modified_time" content="2026-01-06T15:46:13.039450">
+    <meta name="date" content="2026-01-06">
+    <meta name="last-modified" content="2026-01-06 15:46:13">
     
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="NovelVibe - Free Novels for Women">
     <meta property="og:description" content="Discover thousands of free werewolf romance novels">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.3novelpeacp.top/">
-    <meta property="og:image" content="https://www.3novelpeacp.top/assets/images/og-image.jpg">
+    <meta property="og:url" content="https://novel.foodnewsnews.cc/">
+    <meta property="og:image" content="https://novel.foodnewsnews.cc/assets/images/og-image.jpg">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NovelVibe">
     <meta name="twitter:description" content="Free werewolf romance novels">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.3novelpeacp.top/">
+    <link rel="canonical" href="https://novel.foodnewsnews.cc/">
     
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KM9R2XBQSL"></script>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKK2QRZ5GC"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
-      gtag('config', 'G-KM9R2XBQSL');
+      gtag('config', 'G-YKK2QRZ5GC');
     </script>
     
-    <!-- Page Visit Statistics Code -->
+    <!-- Google AdSense
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8873012348232644"
+         crossorigin="anonymous"></script>
+     -->
+
+
+
+    <!-- Facebook Pixel Code -->
     <script>
-    // Page visit data collection
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '835106315764533');
+    
+    // Natural 72-hour event tracking prevention (resets every 3 days)
+    function shouldTrackEvent(eventName) {
+        const now = new Date();
+        const threeDaysAgo = new Date(now.getTime() - (3 * 24 * 60 * 60 * 1000));
+        const currentPeriod = Math.floor(now.getTime() / (3 * 24 * 60 * 60 * 1000));
+        const storageKey = `fb_event_${eventName}`;
+        const lastTrackedPeriod = localStorage.getItem(storageKey);
+        
+        if (!lastTrackedPeriod || parseInt(lastTrackedPeriod) !== currentPeriod) {
+            localStorage.setItem(storageKey, currentPeriod.toString());
+            return true;
+        }
+        
+        return false;
+    }
+    
+    // Track PageView with 72-hour prevention
+    if (shouldTrackEvent('PageView_Index')) {
+        fbq('track', 'PageView');
+        console.log('Facebook事件已发送: PageView (索引页浏览)');
+    } else {
+        console.log('Facebook事件已跳过: PageView_Index (本72小时内已发送)');
+    }
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=835106315764533&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
+    
+    <!-- 页面访问统计代码 -->
+    <script>
+    // 页面访问数据收集
     function sendPageVisit() {
-        // First get user IP address
+        // 先获取用户IP地址
         getUserIP().then(userIP => {
             const data = {
                 page: window.location.href,
                 userAgent: navigator.userAgent,
+                referrer: document.referrer || 'direct',
                 userIP: userIP
             };
             
-            // Send data to Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbxelrFrGdaEQc3FabEG8j4lGrH1z3otX-1zCQbEhAym04fIm6qQ9lLLqjjrjjVlsnRx/exec', {
+            // 发送数据到 Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbxuCd58gcBzU-T_ipn7HWCrOM3Mex1c3PiHc8FmFIUe6Zm_KxSbkrsgOwyEgWYm1fsEdQ/exec', {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
@@ -73,15 +113,15 @@
                 console.log('Analytics error:', error);
             });
         }).catch(error => {
-            // If IP retrieval fails, still send other data
+            // 如果获取IP失败，仍发送其他数据
             const data = {
                 page: window.location.href,
                 userAgent: navigator.userAgent,
-                userIP: 'Unknown',
-                referrer: getReferrerSource()
+                referrer: document.referrer || 'direct',
+                userIP: 'Unknown'
             };
             
-            fetch('https://script.google.com/macros/s/AKfycbyF5Vot_R9Rq_hoZmcPeK_-2rY9tPphz9jLsru1KX7z-krv7-LIJ90fFHSJ0tNJbPQX/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbxuCd58gcBzU-T_ipn7HWCrOM3Mex1c3PiHc8FmFIUe6Zm_KxSbkrsgOwyEgWYm1fsEdQ/exec', {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
@@ -94,63 +134,34 @@
         });
     }
     
-    // Get referrer source (traffic source detection)
-    function getReferrerSource() {
-        const referrer = document.referrer || '';
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        if (urlParams.has('utm_source')) return 'Campaign: ' + urlParams.get('utm_source');
-        if (urlParams.has('fbclid')) return 'Facebook Ads';
-        if (urlParams.has('gclid')) return 'Google Ads';
-        if (!referrer) return 'Direct Traffic';
-        
-        try {
-            const refUrl = new URL(referrer);
-            const refHost = refUrl.hostname.toLowerCase();
-            if (refHost.includes('google.')) return 'Google Search';
-            if (refHost.includes('facebook.com') || refHost.includes('fb.com')) return 'Facebook';
-            if (refHost.includes('instagram.com')) return 'Instagram';
-            if (refHost.includes('twitter.com') || refHost.includes('t.co')) return 'Twitter/X';
-            if (refHost.includes('tiktok.com')) return 'TikTok';
-            if (refHost.includes('bing.com')) return 'Bing Search';
-            if (refHost.includes('yahoo.com')) return 'Yahoo Search';
-            if (refHost.includes('reddit.com')) return 'Reddit';
-            if (refHost.includes('pinterest.com')) return 'Pinterest';
-            if (refHost === window.location.hostname) return 'Internal Navigation';
-            return 'Referral: ' + refHost;
-        } catch (e) {
-            return 'Unknown Referrer';
-        }
-    }
-    
-    // Get user IP address
+    // 获取用户IP地址
     async function getUserIP() {
         try {
-            // Method 1: Use free IP API
+            // 方法1：使用免费的IP API
             const response = await fetch('https://api.ipify.org?format=json');
             const ipData = await response.json();
             return ipData.ip;
         } catch (error1) {
             try {
-                // Method 2: Backup IP API
+                // 方法2：备用IP API
                 const response = await fetch('https://httpbin.org/ip');
                 const ipData = await response.json();
                 return ipData.origin.split(',')[0].trim();
             } catch (error2) {
                 try {
-                    // Method 3: Third backup API
+                    // 方法3：第三个备用API
                     const response = await fetch('https://jsonip.com');
                     const ipData = await response.json();
                     return ipData.ip;
                 } catch (error3) {
-                    console.log('IP retrieval failed, using Unknown');
+                    console.log('获取IP失败，使用Unknown');
                     return 'Unknown';
                 }
             }
         }
     }
     
-    // Send visit data after page load
+    // 页面加载完成后发送访问数据
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', sendPageVisit);
     } else {
@@ -723,9 +734,6 @@
             }
         }
     </style>
-    
-    <!-- Ahrefs Analytics -->
-    <script src="https://analytics.ahrefs.com/analytics.js" data-key="E2ZZe80dfDLAEGhT2iI37A" async></script>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -761,350 +769,178 @@
                 <h2 class="section-title">Recommended For You</h2>
             </div>
             <div class="cards-grid" id="recommended-grid">
-                <!-- 默认展示30本小说 -->
+                <!-- 默认展示8本小说 -->
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/once-discarded-now-desired-2/">
-                            <img src="/covers/once-discarded-now-desired-2-书籍封面.png" alt="Once Discarded, Now Desired 2" class="novel-cover">
+                        <a href="/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/">
+                            <img src="/covers/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex-封面.png" alt="I just found out I’m pregnant and my husband’s checking into a hotel with his ex" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/once-discarded-now-desired-2/" style="color: inherit; text-decoration: none;">Once Discarded, Now Desired 2</a></h3>
-                        <p class="novel-desc">After three years of giving her all to the marriage Eleanor&#39;s reward was nothing but a ruthless divorce! Trouble brewed from her ex-husband&#39;s old lover, and the in-law eagerly piled on. Coffee...</p>
+                        <h3 class="novel-title"><a href="/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/" style="color: inherit; text-decoration: none;">I just found out I’m pregnant and my husband’s checking into a hotel with his ex</a></h3>
+                        <p class="novel-desc">...</p>
+                        <div class="tags">
+                            
+                            <span class="tag">romance</span>
+                            
+                            <span class="tag">fantasy</span>
+                            
+                        </div>
+                        <div class="card-footer">
+                            <a href="/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="novel-card">
+                    <div class="cover-container">
+                        <a href="/novels/the-billionaires-regrethis-adopted-fiancée-fled/">
+                            <img src="/covers/the-billionaires-regrethis-adopted-fiancée-fled-ScreenShot_2025-10-31_143504_446.png" alt="The Billionaire&#39;s Regret：His Adopted Fiancée Fled" class="novel-cover">
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="novel-title"><a href="/novels/the-billionaires-regrethis-adopted-fiancée-fled/" style="color: inherit; text-decoration: none;">The Billionaire&#39;s Regret：His Adopted Fiancée Fled</a></h3>
+                        <p class="novel-desc">I was Alexander Kingsley&#39;s perfect porcelain doll until I found his white dresses hid bloodstained secrets. Now as an investigative journalist, I&#39;ll expose his billion-dollar empire&#39;s lies – even if...</p>
                         <div class="tags">
                             
                             <span class="tag">romance</span>
                             
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/once-discarded-now-desired-2/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/the-billionaires-regrethis-adopted-fiancée-fled/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/the-son-of-red-fang/">
-                            <img src="/covers/the-son-of-red-fang-ScreenShot_2025-11-27_104040_145.png" alt="The Son of Red Fang" class="novel-cover">
+                        <a href="/novels/marriage-by-contract-with-a-billionaire/">
+                            <img src="/covers/marriage-by-contract-with-a-billionaire-书籍封面.png" alt="Marriage By Contract with a Billionaire" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/the-son-of-red-fang/" style="color: inherit; text-decoration: none;">The Son of Red Fang</a></h3>
-                        <p class="novel-desc">Alpha werewolves should be cruel and merciless with unquestionable strength and authority, at least that’s what Alpha Charles Redmen believes and he doesn’t hesitate to raise his kids to be the same...</p>
+                        <h3 class="novel-title"><a href="/novels/marriage-by-contract-with-a-billionaire/" style="color: inherit; text-decoration: none;">Marriage By Contract with a Billionaire</a></h3>
+                        <p class="novel-desc">I never imagined I’d end up as Mrs. Alexander Kane. The cold, enigmatic billionaire barely notices anyone—let alone me. But when his grandfather&#39;s will demands that he marry and have a child within...</p>
                         <div class="tags">
                             
-                            <span class="tag">werewolf</span>
-                            
-                            <span class="tag">alpha</span>
-                            
-                            <span class="tag">pack</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/the-son-of-red-fang/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/unstoppable-brilliance-she-has-the-world-on-a-leash/">
-                            <img src="/covers/unstoppable-brilliance-she-has-the-world-on-a-leash-ScreenShot_2025-11-27_104017_490.png" alt="Unstoppable Brilliance She Has The World On A Leash" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/unstoppable-brilliance-she-has-the-world-on-a-leash/" style="color: inherit; text-decoration: none;">Unstoppable Brilliance She Has The World On A Leash</a></h3>
-                        <p class="novel-desc">Hidden for years by the state despite a fortune worth billions, Grace bounced through three foster homes. At her fourth stop, the wealthy Holden family showered her with care, sparking spiteful...</p>
-                        <div class="tags">
+                            <span class="tag">romance</span>
                             
                             <span class="tag">ceo</span>
                             
                             <span class="tag">billionaire</span>
                             
-                            <span class="tag">contemporary</span>
-                            
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/unstoppable-brilliance-she-has-the-world-on-a-leash/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/marriage-by-contract-with-a-billionaire/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/the-last-spirit-wolf/">
-                            <img src="/covers/the-last-spirit-wolf-书籍封面.png" alt="The Last Spirit Wolf" class="novel-cover">
+                        <a href="/novels/the-ex-ceo-husband-went-mad-post-divorce/">
+                            <img src="/covers/the-ex-ceo-husband-went-mad-post-divorce-制作封面图片 (4).png" alt="The ex-CEO husband went mad post-divorce" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/the-last-spirit-wolf/" style="color: inherit; text-decoration: none;">The Last Spirit Wolf</a></h3>
-                        <p class="novel-desc">“INCOMING! 10 Injured Wolves and 3 Lycans! “ Sophie, my bestie, our alpha yells in my head “LYCANS?! Did you just say LYCANS?! “Yes Vera! They are coming! Get your people ready.” I couldn’t believe...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">werewolf</span>
-                            
-                            <span class="tag">alpha</span>
-                            
-                            <span class="tag">pack</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/the-last-spirit-wolf/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/irresistible-temptation-from-the-meek-wife-to-the-daring-star/">
-                            <img src="/covers/irresistible-temptation-from-the-meek-wife-to-the-daring-star-书籍封面.png" alt="Irresistible Temptation From The Meek Wife To The Daring Star" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/irresistible-temptation-from-the-meek-wife-to-the-daring-star/" style="color: inherit; text-decoration: none;">Irresistible Temptation From The Meek Wife To The Daring Star</a></h3>
-                        <p class="novel-desc">One year into marriage, Yvonne realized she was nothing more than a substitute for someone else memory. When his true love reappeared, Julian tossed a divorce contract her way. &#34;She&#39;s back. We&#39;re...</p>
+                        <h3 class="novel-title"><a href="/novels/the-ex-ceo-husband-went-mad-post-divorce/" style="color: inherit; text-decoration: none;">The ex-CEO husband went mad post-divorce</a></h3>
+                        <p class="novel-desc">（There is a lot of sexual and stimulating content, minors are not allowed to read!!!） She prepared for pregnancy and did her best to take care of her drunken husband. Afterwards, her husband kicked...</p>
                         <div class="tags">
                             
                             <span class="tag">romance</span>
                             
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/irresistible-temptation-from-the-meek-wife-to-the-daring-star/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/the-ex-ceo-husband-went-mad-post-divorce/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/the-heiress-spoiled-by-four-brothers-and-one-devilish-ceo/">
-                            <img src="/covers/the-heiress-spoiled-by-four-brothers-and-one-devilish-ceo-书籍封面.png" alt="The Heiress Spoiled by Four Brothers and One Devilish CEO" class="novel-cover">
+                        <a href="/novels/the-queens-rebirth/">
+                            <img src="/covers/the-queens-rebirth-ScreenShot_2025-10-17_141918_778.png" alt="The Queen&#39;s Rebirth" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/the-heiress-spoiled-by-four-brothers-and-one-devilish-ceo/" style="color: inherit; text-decoration: none;">The Heiress Spoiled by Four Brothers and One Devilish CEO</a></h3>
-                        <p class="novel-desc">...</p>
+                        <h3 class="novel-title"><a href="/novels/the-queens-rebirth/" style="color: inherit; text-decoration: none;">The Queen&#39;s Rebirth</a></h3>
+                        <p class="novel-desc">Reborn amid viral infamy, Lucy White dismantles her &#34;talentless heiress&#34; narrative with guzheng virtuosity, wilderness grit, and chef-level precision. As mockery turns to awe, A-lister Ethan Smith...</p>
                         <div class="tags">
                             
                             <span class="tag">romance</span>
-                            
-                            <span class="tag">fantasy</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/the-heiress-spoiled-by-four-brothers-and-one-devilish-ceo/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen/">
-                            <img src="/covers/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen-ScreenShot_2025-11-27_104240_384.png" alt="Brilliance Unmasked： The Cold-Blooded Tycoon Wants His Vengeful Queen" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen/" style="color: inherit; text-decoration: none;">Brilliance Unmasked： The Cold-Blooded Tycoon Wants His Vengeful Queen</a></h3>
-                        <p class="novel-desc">Arabella, a state-trained prodigy, won freedom after seven brutal years. Back home, she found he aunt basking in her late parents&#39; mansion while hei twin sister scrounged for scraps. Fury ignited her...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                            <span class="tag">fantasy</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/rejected-no-more-i-am-way-out-of-your-league-darling/">
-                            <img src="/covers/rejected-no-more-i-am-way-out-of-your-league-darling-书籍封面.png" alt="Rejected No More I Am Way Out Of Your League, Darling!" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/rejected-no-more-i-am-way-out-of-your-league-darling/" style="color: inherit; text-decoration: none;">Rejected No More I Am Way Out Of Your League, Darling!</a></h3>
-                        <p class="novel-desc">For ten years, Daniela showered her ex-husband with unwavering devotion,only to discover she was just his biggest joke. Feeling humiliated yet determined,she finally divorced him. Three months later,...</p>
-                        <div class="tags">
                             
                             <span class="tag">ceo</span>
                             
                             <span class="tag">billionaire</span>
                             
-                            <span class="tag">contemporary</span>
-                            
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/rejected-no-more-i-am-way-out-of-your-league-darling/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/the-queens-rebirth/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/irresistible-seduction-married-for-deception-loved-for-real/">
-                            <img src="/covers/irresistible-seduction-married-for-deception-loved-for-real-封面.png" alt="Irresistible Seduction Married For Deception, Loved For Real" class="novel-cover">
+                        <a href="/novels/the-billionaires-forbidden-contract/">
+                            <img src="/covers/the-billionaires-forbidden-contract-ScreenShot_2025-10-31_143450_382.png" alt="The Billionaire&#39;s Forbidden Contract" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/irresistible-seduction-married-for-deception-loved-for-real/" style="color: inherit; text-decoration: none;">Irresistible Seduction Married For Deception, Loved For Real</a></h3>
-                        <p class="novel-desc">Five years into marriage, Hannah caught Vincent slipping into a hotel with his first love-the woman ,au-bu!uiXJa^a Jay pio+ 1ubis auL 1ob0 Ja^au au married her only for her resemblance to his true...</p>
+                        <h3 class="novel-title"><a href="/novels/the-billionaires-forbidden-contract/" style="color: inherit; text-decoration: none;">The Billionaire&#39;s Forbidden Contract</a></h3>
+                        <p class="novel-desc">A destitute student enters a dangerous bargain with a tech tycoon to uncover corporate secrets, but their forbidden attraction threatens to destroy both their revenge plot and hearts. As power plays...</p>
                         <div class="tags">
                             
                             <span class="tag">romance</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/irresistible-seduction-married-for-deception-loved-for-real/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/crimson-moons-exile/">
-                            <img src="/covers/crimson-moons-exile-ScreenShot_2025-11-27_103934_971.png" alt="Crimson Moon&#39;s Exile" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/crimson-moons-exile/" style="color: inherit; text-decoration: none;">Crimson Moon&#39;s Exile</a></h3>
-                        <p class="novel-desc">A fallen prince. A human marked for death. An eternal vow that shatters worlds.
-When Kaizen, a monstrous heir to hell, saves teacher Willow from his own pack, he becomes a traitor. Hunted for murder,...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">werewolf</span>
-                            
-                            <span class="tag">alpha</span>
-                            
-                            <span class="tag">pack</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/crimson-moons-exile/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/married-to-an-ugly-husband-no/">
-                            <img src="/covers/married-to-an-ugly-husband-no-书籍封面.png" alt="Married to an Ugly Husband No!" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/married-to-an-ugly-husband-no/" style="color: inherit; text-decoration: none;">Married to an Ugly Husband No!</a></h3>
-                        <p class="novel-desc">My malicious stepsister threatened me with my brother&#39;s life, forcing me to marry a man rumored to be unspeakably ugly. I had no choice but to comply. However, after the wedding, I discovered that...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">ocean</span>
-                            
-                            <span class="tag">underwater</span>
-                            
-                            <span class="tag">marine</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/married-to-an-ugly-husband-no/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/the-rise-of-the-ugly-luna-2/">
-                            <img src="/covers/the-rise-of-the-ugly-luna-2-书籍封面.png" alt="The Rise Of The Ugly Luna 2" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/the-rise-of-the-ugly-luna-2/" style="color: inherit; text-decoration: none;">The Rise Of The Ugly Luna 2</a></h3>
-                        <p class="novel-desc">Lyric had spent her life being hated. Bullied for her scarred face and hated by everyone-including her own mate-she was always told she was ugly. Her mate only kept her around to gain territory, and...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">werewolf</span>
-                            
-                            <span class="tag">alpha</span>
-                            
-                            <span class="tag">pack</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/the-rise-of-the-ugly-luna-2/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/she-was-the-joke-now-shes-the-queen/">
-                            <img src="/covers/she-was-the-joke-now-shes-the-queen-书籍封面.png" alt="She Was The Joke, Now She&#39;s The Queen" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/she-was-the-joke-now-shes-the-queen/" style="color: inherit; text-decoration: none;">She Was The Joke, Now She&#39;s The Queen</a></h3>
-                        <p class="novel-desc">Two years of marriage left Brinley questioning everything, her supposed happiness revealed as nothing but sham. Abandoning her past for Colin, she discovered onl betrayal and a counterfeit wedding....</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                            <span class="tag">fantasy</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/she-was-the-joke-now-shes-the-queen/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/hell-in-his-eyes-heaven-in-his-kiss/">
-                            <img src="/covers/hell-in-his-eyes-heaven-in-his-kiss-书籍封面.png" alt="Hell In His Eyes, Heaven In His Kiss" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/hell-in-his-eyes-heaven-in-his-kiss/" style="color: inherit; text-decoration: none;">Hell In His Eyes, Heaven In His Kiss</a></h3>
-                        <p class="novel-desc">Gabriela learned her boyfriend had been two-timing her and writing her off as a brainless bimbo, so she drowned her heartache in reckless adventure. One sultry blackout night she tumbled into bed...</p>
-                        <div class="tags">
                             
                             <span class="tag">ceo</span>
                             
                             <span class="tag">billionaire</span>
                             
-                            <span class="tag">contemporary</span>
-                            
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/hell-in-his-eyes-heaven-in-his-kiss/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/the-billionaires-forbidden-contract/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/the-queen-returns-pampered-by-her-three-powerhouse-brothers/">
-                            <img src="/covers/the-queen-returns-pampered-by-her-three-powerhouse-brothers-ScreenShot_2025-11-27_104058_981.png" alt="The Queen Returns Pampered By Her Three Powerhouse Brothers" class="novel-cover">
+                        <a href="/novels/the-fallen-heiress-gambit/">
+                            <img src="/covers/the-fallen-heiress-gambit-ScreenShot_2025-10-17_141821_715.png" alt="The Fallen Heiress&#39; Gambit" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/the-queen-returns-pampered-by-her-three-powerhouse-brothers/" style="color: inherit; text-decoration: none;">The Queen Returns Pampered By Her Three Powerhouse Brothers</a></h3>
-                        <p class="novel-desc">...</p>
+                        <h3 class="novel-title"><a href="/novels/the-fallen-heiress-gambit/" style="color: inherit; text-decoration: none;">The Fallen Heiress&#39; Gambit</a></h3>
+                        <p class="novel-desc">Evelyn Sinclair thought marrying into the Blackwood dynasty would secure her future. Instead, she awakens to a nightmare—her &#34;husband&#34; Nathan is secretly funding her rival, her best friend is a spy,...</p>
+                        <div class="tags">
+                            
+                            <span class="tag">romance</span>
+                            
+                        </div>
+                        <div class="card-footer">
+                            <a href="/novels/the-fallen-heiress-gambit/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="novel-card">
+                    <div class="cover-container">
+                        <a href="/novels/the-hidden-heiress-divorces-the-ceo/">
+                            <img src="/covers/the-hidden-heiress-divorces-the-ceo-wechat_2025-09-23_154056_444.png" alt="The Hidden Heiress Divorces the CEO" class="novel-cover">
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="novel-title"><a href="/novels/the-hidden-heiress-divorces-the-ceo/" style="color: inherit; text-decoration: none;">The Hidden Heiress Divorces the CEO</a></h3>
+                        <p class="novel-desc">I bled for three years as Nathan&#39;s invisible wife. When the plane crash exposed his mistress, I reclaimed my birthright as Kingsley heiress. Now his corporation trembles before my jewels and...</p>
                         <div class="tags">
                             
                             <span class="tag">romance</span>
@@ -1113,267 +949,8 @@ When Kaizen, a monstrous heir to hell, saves teacher Willow from his own pack, h
                             
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/the-queen-returns-pampered-by-her-three-powerhouse-brothers/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/heartbreak-billionairehe-should-never-have-let-go/">
-                            <img src="/covers/heartbreak-billionairehe-should-never-have-let-go-ScreenShot_2025-11-27_104212_338.png" alt="Heartbreak Billionaire：He should never have Let Go" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/heartbreak-billionairehe-should-never-have-let-go/" style="color: inherit; text-decoration: none;">Heartbreak Billionaire：He should never have Let Go</a></h3>
-                        <p class="novel-desc">Sunlit hours found their affection glimmering while moonlit nights ignited reckless desire. But when Brandon learned his beloved might last only half a year, he coolly handed Millie divorce papers,...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/heartbreak-billionairehe-should-never-have-let-go/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/heaven-sent-her-hell-obeyed-her/">
-                            <img src="/covers/heaven-sent-her-hell-obeyed-her-书籍封面.png" alt="Heaven Sent Her, Hell Obeyed Her" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/heaven-sent-her-hell-obeyed-her/" style="color: inherit; text-decoration: none;">Heaven Sent Her, Hell Obeyed Her</a></h3>
-                        <p class="novel-desc">...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                            <span class="tag">fantasy</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/heaven-sent-her-hell-obeyed-her/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/a-goddess-in-disguise-divorce-marriage-domination/">
-                            <img src="/covers/a-goddess-in-disguise-divorce-marriage-domination-ScreenShot_2025-11-27_104258_654.png" alt="A Goddess In Disguise Divorce, Marriage, Domination" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/a-goddess-in-disguise-divorce-marriage-domination/" style="color: inherit; text-decoration: none;">A Goddess In Disguise Divorce, Marriage, Domination</a></h3>
-                        <p class="novel-desc">...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                            <span class="tag">fantasy</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/a-goddess-in-disguise-divorce-marriage-domination/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/marrying-her-was-easy-losing-her-was-hell/">
-                            <img src="/covers/marrying-her-was-easy-losing-her-was-hell-ScreenShot_2025-11-27_104146_596.png" alt="Marrying Her Was Easy, Losing Her Was Hell" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/marrying-her-was-easy-losing-her-was-hell/" style="color: inherit; text-decoration: none;">Marrying Her Was Easy, Losing Her Was Hell</a></h3>
-                        <p class="novel-desc">&#34;Stella once savored Marc&#39;s devotion, yet his covert cruelty cut deep. She torched their weddin&#39; portrait at his feet while he sent flirty messages to his mistress. With her chest tight and eyes...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">ocean</span>
-                            
-                            <span class="tag">underwater</span>
-                            
-                            <span class="tag">marine</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/marrying-her-was-easy-losing-her-was-hell/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/too-late-for-regret-the-genius-heiress-who-shines/">
-                            <img src="/covers/too-late-for-regret-the-genius-heiress-who-shines-ScreenShot_2025-11-27_104318_455.png" alt="Too Late For Regret The Genius Heiress Who Shines" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/too-late-for-regret-the-genius-heiress-who-shines/" style="color: inherit; text-decoration: none;">Too Late For Regret The Genius Heiress Who Shines</a></h3>
-                        <p class="novel-desc">Blinded in a crash, Cary was rejected by every socialite—except Evelina, who married him without hesitation. Three years later, he regained his sight and ended their marriage. &#34;We’ve already lost so...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">ceo</span>
-                            
-                            <span class="tag">billionaire</span>
-                            
-                            <span class="tag">contemporary</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/too-late-for-regret-the-genius-heiress-who-shines/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive/">
-                            <img src="/covers/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive-书籍封面.png" alt="Finding Bliss Again My Baby Daddy Is The Most Powerful Man Alive!" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive/" style="color: inherit; text-decoration: none;">Finding Bliss Again My Baby Daddy Is The Most Powerful Man Alive!</a></h3>
-                        <p class="novel-desc">At their wedding night, Kayla caught her brand-new husband cheating. Reeling and half-drunk, she staggered into the wrong suite and collapsed into a stranger&#39;s arms Sunrise brought a pounding...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">ceo</span>
-                            
-                            <span class="tag">billionaire</span>
-                            
-                            <span class="tag">contemporary</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3/">
-                            <img src="/covers/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3-书籍封面.png" alt="Love&#39;s Prescription The Small-Town Girl Is An Extraordinary Healer 3" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3/" style="color: inherit; text-decoration: none;">Love&#39;s Prescription The Small-Town Girl Is An Extraordinary Healer 3</a></h3>
-                        <p class="novel-desc">To most, Verena passed for a small-town clinic doctor; in truth, she worked quiet miracles. Three years after Isaac fell hopelessly for her and kept vigil through lonely nights, a crash left him in a...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/scorned-ex-wife-queen-of-ashes/">
-                            <img src="/covers/scorned-ex-wife-queen-of-ashes-封面.png" alt="SCORNED EX WIFE  Queen Of Ashes" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/scorned-ex-wife-queen-of-ashes/" style="color: inherit; text-decoration: none;">SCORNED EX WIFE  Queen Of Ashes</a></h3>
-                        <p class="novel-desc">...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                            <span class="tag">fantasy</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/scorned-ex-wife-queen-of-ashes/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/the-humble-ex-wife-is-now-a-brillia/">
-                            <img src="/covers/the-humble-ex-wife-is-now-a-brillia-ScreenShot_2025-11-27_104122_502.png" alt="The Humble Ex-wife Is Now A Brillia" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/the-humble-ex-wife-is-now-a-brillia/" style="color: inherit; text-decoration: none;">The Humble Ex-wife Is Now A Brillia</a></h3>
-                        <p class="novel-desc">For three quiet, patient years, Christina kept house,only to be coldly discarded by the man she once trusted.
-
-
-
-Instead,he paraded a new lover, making her the punchline of every town...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/the-humble-ex-wife-is-now-a-brillia/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/i-slapped-my-fiance-then-married-his-billionaire-nemesis/">
-                            <img src="/covers/i-slapped-my-fiance-then-married-his-billionaire-nemesis-封面.png" alt="I Slapped My Fiancé-Then Married His Billionaire Nemesis" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/i-slapped-my-fiance-then-married-his-billionaire-nemesis/" style="color: inherit; text-decoration: none;">I Slapped My Fiancé-Then Married His Billionaire Nemesis</a></h3>
-                        <p class="novel-desc">...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                            <span class="tag">fantasy</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/i-slapped-my-fiance-then-married-his-billionaire-nemesis/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/the-unwanted-daughters-alpha-king/">
-                            <img src="/covers/the-unwanted-daughters-alpha-king-封面.png" alt="The Unwanted Daughter&#39;s Alpha King" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/the-unwanted-daughters-alpha-king/" style="color: inherit; text-decoration: none;">The Unwanted Daughter&#39;s Alpha King</a></h3>
-                        <p class="novel-desc">The door behind me opened. Alpha Adrian was smiling, looking at the man now standing before us both, but his face fell the second his eyes landed on me, shock and disgust filling his gaze. ‘Alpha...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">werewolf</span>
-                            
-                            <span class="tag">alpha</span>
-                            
-                            <span class="tag">pack</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/the-unwanted-daughters-alpha-king/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/the-hidden-heiress-divorces-the-ceo/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
@@ -1401,38 +978,80 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/hell-in-his-eyes-heaven-in-his-kiss/">
-                            <img src="/covers/hell-in-his-eyes-heaven-in-his-kiss-书籍封面.png" alt="Hell In His Eyes, Heaven In His Kiss" class="novel-cover">
+                        <a href="/novels/the-betrayed-wifes-revenge-marrying-the-ceo/">
+                            <img src="/covers/the-betrayed-wifes-revenge-marrying-the-ceo-书籍封面.png" alt="The Betrayed Wife&#39;s Revenge Marrying the CEO" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/hell-in-his-eyes-heaven-in-his-kiss/" style="color: inherit; text-decoration: none;">Hell In His Eyes, Heaven In His Kiss</a></h3>
-                        <p class="novel-desc">Gabriela learned her boyfriend had been two-timing her and writing her off as a brainless bimbo, so she drowned her heartache in reckless adventure. One sultry blackout night she tumbled into bed...</p>
+                        <h3 class="novel-title"><a href="/novels/the-betrayed-wifes-revenge-marrying-the-ceo/" style="color: inherit; text-decoration: none;">The Betrayed Wife&#39;s Revenge Marrying the CEO</a></h3>
+                        <p class="novel-desc">&#34;Can you and Daddy get divorced?&#34; Those six words from my seven-year-old son shattered my world, and I never imagined he and my husband would choose another woman over me, leaving me broken and...</p>
                         <div class="tags">
+                            
+                            <span class="tag">romance</span>
                             
                             <span class="tag">ceo</span>
                             
                             <span class="tag">billionaire</span>
                             
-                            <span class="tag">contemporary</span>
-                            
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/hell-in-his-eyes-heaven-in-his-kiss/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/the-betrayed-wifes-revenge-marrying-the-ceo/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen/">
-                            <img src="/covers/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen-ScreenShot_2025-11-27_104240_384.png" alt="Brilliance Unmasked： The Cold-Blooded Tycoon Wants His Vengeful Queen" class="novel-cover">
+                        <a href="/novels/the-fallen-heiress-gambit/">
+                            <img src="/covers/the-fallen-heiress-gambit-ScreenShot_2025-10-17_141821_715.png" alt="The Fallen Heiress&#39; Gambit" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen/" style="color: inherit; text-decoration: none;">Brilliance Unmasked： The Cold-Blooded Tycoon Wants His Vengeful Queen</a></h3>
-                        <p class="novel-desc">Arabella, a state-trained prodigy, won freedom after seven brutal years. Back home, she found he aunt basking in her late parents&#39; mansion while hei twin sister scrounged for scraps. Fury ignited her...</p>
+                        <h3 class="novel-title"><a href="/novels/the-fallen-heiress-gambit/" style="color: inherit; text-decoration: none;">The Fallen Heiress&#39; Gambit</a></h3>
+                        <p class="novel-desc">Evelyn Sinclair thought marrying into the Blackwood dynasty would secure her future. Instead, she awakens to a nightmare—her &#34;husband&#34; Nathan is secretly funding her rival, her best friend is a spy,...</p>
+                        <div class="tags">
+                            
+                            <span class="tag">romance</span>
+                            
+                        </div>
+                        <div class="card-footer">
+                            <a href="/novels/the-fallen-heiress-gambit/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="novel-card">
+                    <div class="cover-container">
+                        <a href="/novels/heartbreak-billionairehe-should-never-have-let-go/">
+                            <img src="/covers/heartbreak-billionairehe-should-never-have-let-go-书籍封面.png" alt="Heartbreak Billionaire：He should never have Let Go" class="novel-cover">
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="novel-title"><a href="/novels/heartbreak-billionairehe-should-never-have-let-go/" style="color: inherit; text-decoration: none;">Heartbreak Billionaire：He should never have Let Go</a></h3>
+                        <p class="novel-desc">Sunlit hours found their affection glimmering while moonlit nights ignited reckless desire. But when Brandon learned his beloved might last only half a year, he coolly handed Millie divorce papers,...</p>
+                        <div class="tags">
+                            
+                            <span class="tag">romance</span>
+                            
+                        </div>
+                        <div class="card-footer">
+                            <a href="/novels/heartbreak-billionairehe-should-never-have-let-go/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="novel-card">
+                    <div class="cover-container">
+                        <a href="/novels/the-hidden-heiress-divorces-the-ceo/">
+                            <img src="/covers/the-hidden-heiress-divorces-the-ceo-wechat_2025-09-23_154056_444.png" alt="The Hidden Heiress Divorces the CEO" class="novel-cover">
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="novel-title"><a href="/novels/the-hidden-heiress-divorces-the-ceo/" style="color: inherit; text-decoration: none;">The Hidden Heiress Divorces the CEO</a></h3>
+                        <p class="novel-desc">I bled for three years as Nathan&#39;s invisible wife. When the plane crash exposed his mistress, I reclaimed my birthright as Kingsley heiress. Now his corporation trembles before my jewels and...</p>
                         <div class="tags">
                             
                             <span class="tag">romance</span>
@@ -1441,67 +1060,21 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
                             
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/the-hidden-heiress-divorces-the-ceo/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="novel-card">
                     <div class="cover-container">
-                        <a href="/novels/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3/">
-                            <img src="/covers/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3-书籍封面.png" alt="Love&#39;s Prescription The Small-Town Girl Is An Extraordinary Healer 3" class="novel-cover">
+                        <a href="/novels/the-billionaires-unwanted-ex-wife-is-the-genius-tycoon/">
+                            <img src="/covers/the-billionaires-unwanted-ex-wife-is-the-genius-tycoon-ScreenShot_2025-10-31_144406_261.png" alt="The Billionaire&#39;s Unwanted Ex-wife is the Genius Tycoon" class="novel-cover">
                         </a>
                     </div>
                     <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3/" style="color: inherit; text-decoration: none;">Love&#39;s Prescription The Small-Town Girl Is An Extraordinary Healer 3</a></h3>
-                        <p class="novel-desc">To most, Verena passed for a small-town clinic doctor; in truth, she worked quiet miracles. Three years after Isaac fell hopelessly for her and kept vigil through lonely nights, a crash left him in a...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">romance</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive/">
-                            <img src="/covers/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive-书籍封面.png" alt="Finding Bliss Again My Baby Daddy Is The Most Powerful Man Alive!" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive/" style="color: inherit; text-decoration: none;">Finding Bliss Again My Baby Daddy Is The Most Powerful Man Alive!</a></h3>
-                        <p class="novel-desc">At their wedding night, Kayla caught her brand-new husband cheating. Reeling and half-drunk, she staggered into the wrong suite and collapsed into a stranger&#39;s arms Sunrise brought a pounding...</p>
-                        <div class="tags">
-                            
-                            <span class="tag">ceo</span>
-                            
-                            <span class="tag">billionaire</span>
-                            
-                            <span class="tag">contemporary</span>
-                            
-                        </div>
-                        <div class="card-footer">
-                            <a href="/novels/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="novel-card">
-                    <div class="cover-container">
-                        <a href="/novels/heaven-sent-her-hell-obeyed-her/">
-                            <img src="/covers/heaven-sent-her-hell-obeyed-her-书籍封面.png" alt="Heaven Sent Her, Hell Obeyed Her" class="novel-cover">
-                        </a>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="novel-title"><a href="/novels/heaven-sent-her-hell-obeyed-her/" style="color: inherit; text-decoration: none;">Heaven Sent Her, Hell Obeyed Her</a></h3>
-                        <p class="novel-desc">...</p>
+                        <h3 class="novel-title"><a href="/novels/the-billionaires-unwanted-ex-wife-is-the-genius-tycoon/" style="color: inherit; text-decoration: none;">The Billionaire&#39;s Unwanted Ex-wife is the Genius Tycoon</a></h3>
+                        <p class="novel-desc">I was Nathaniel Falcon’s unwanted wife—a &#34;country bumpkin&#34; he ignored for years. But he never knew I’m Dr. Sinclair, the genius surgeon who saved his life. Now that he’s chasing his ex, I’ll make him...</p>
                         <div class="tags">
                             
                             <span class="tag">romance</span>
@@ -1510,8 +1083,8 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
                             
                         </div>
                         <div class="card-footer">
-                            <a href="/novels/heaven-sent-her-hell-obeyed-her/" class="read-btn">Read Now</a>
-                            <div class="update-date">2025-11-28</div>
+                            <a href="/novels/the-billionaires-unwanted-ex-wife-is-the-genius-tycoon/" class="read-btn">Read Now</a>
+                            <div class="update-date">2026-01-06</div>
                         </div>
                     </div>
                 </div>
@@ -1523,26 +1096,46 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
         <section class="categories">
             <div class="section-header">
                 <h2 class="section-title">Browse by Category</h2>
-                <a href="/all-novels/" class="view-more">View All Categories</a>
+                <a href="#" class="view-more">View All Categories</a>
             </div>
             <div class="category-list">
                 
                 <div class="category-item">
                     <div class="category-title">
-                        Romance
-                        <a href="/all-novels/">View All</a>
+                        Contemporary
+                        <a href="/category/contemporary/">View All</a>
                     </div>
                     <ul class="category-books">
                         
-                        <li><a href="/novels/i-slapped-my-fiance-then-married-his-billionaire-nemesis/">I Slapped My Fiancé-Then Married His Billionaire Nemesis</a></li>
+                        <li><a href="/novels/the-betrayed-wifes-revenge-marrying-the-ceo/">The Betrayed Wife&#39;s Revenge Marrying the CEO</a></li>
                         
-                        <li><a href="/novels/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3/">Love&#39;s Prescription The Small-Town Girl Is An Extraordinary Healer 3</a></li>
+                        <li><a href="/novels/the-queens-rebirth/">The Queen&#39;s Rebirth</a></li>
                         
-                        <li><a href="/novels/the-son-of-red-fang/">The Son of Red Fang</a></li>
+                        <li><a href="/novels/marriage-by-contract-with-a-billionaire/">Marriage By Contract with a Billionaire</a></li>
                         
-                        <li><a href="/novels/once-discarded-now-desired-2/">Once Discarded, Now Desired 2</a></li>
+                        <li><a href="/novels/the-billionaires-forbidden-contract/">The Billionaire&#39;s Forbidden Contract</a></li>
                         
-                        <li><a href="/novels/a-goddess-in-disguise-divorce-marriage-domination/">A Goddess In Disguise Divorce, Marriage, Domination</a></li>
+                        <li><a href="/novels/runaway-heiress-reborn-crushing-ceo-ex/">Runaway Heiress Reborn： Crushing CEO Ex</a></li>
+                        
+                    </ul>
+                </div>
+                
+                <div class="category-item">
+                    <div class="category-title">
+                        Romance
+                        <a href="/category/romance/">View All</a>
+                    </div>
+                    <ul class="category-books">
+                        
+                        <li><a href="/novels/the-betrayed-wifes-revenge-marrying-the-ceo/">The Betrayed Wife&#39;s Revenge Marrying the CEO</a></li>
+                        
+                        <li><a href="/novels/the-queens-rebirth/">The Queen&#39;s Rebirth</a></li>
+                        
+                        <li><a href="/novels/marriage-by-contract-with-a-billionaire/">Marriage By Contract with a Billionaire</a></li>
+                        
+                        <li><a href="/novels/my-phone-traveled-with-me-to-the-80s/">My Phone Traveled with Me to the-80s</a></li>
+                        
+                        <li><a href="/novels/the-hidden-heiress-divorces-the-ceo/">The Hidden Heiress Divorces the CEO</a></li>
                         
                     </ul>
                 </div>
@@ -1550,59 +1143,19 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
                 <div class="category-item">
                     <div class="category-title">
                         Fantasy
-                        <a href="/all-novels/">View All</a>
+                        <a href="/category/fantasy/">View All</a>
                     </div>
                     <ul class="category-books">
                         
-                        <li><a href="/novels/i-slapped-my-fiance-then-married-his-billionaire-nemesis/">I Slapped My Fiancé-Then Married His Billionaire Nemesis</a></li>
+                        <li><a href="/novels/my-phone-traveled-with-me-to-the-80s/">My Phone Traveled with Me to the-80s</a></li>
                         
-                        <li><a href="/novels/marrying-her-was-easy-losing-her-was-hell/">Marrying Her Was Easy, Losing Her Was Hell</a></li>
+                        <li><a href="/novels/the-hidden-heiress-divorces-the-ceo/">The Hidden Heiress Divorces the CEO</a></li>
                         
-                        <li><a href="/novels/a-goddess-in-disguise-divorce-marriage-domination/">A Goddess In Disguise Divorce, Marriage, Domination</a></li>
+                        <li><a href="/novels/the-billionaires-unwanted-ex-wife-is-the-genius-tycoon/">The Billionaire&#39;s Unwanted Ex-wife is the Genius Tycoon</a></li>
                         
-                        <li><a href="/novels/the-queen-returns-pampered-by-her-three-powerhouse-brothers/">The Queen Returns Pampered By Her Three Powerhouse Brothers</a></li>
+                        <li><a href="/novels/irresistible-seduction-married-for-deception-loved-for-real/">Irresistible Seduction Married For Deception, Loved For Real</a></li>
                         
-                        <li><a href="/novels/heaven-sent-her-hell-obeyed-her/">Heaven Sent Her, Hell Obeyed Her</a></li>
-                        
-                    </ul>
-                </div>
-                
-                <div class="category-item">
-                    <div class="category-title">
-                        Werewolf
-                        <a href="/all-novels/">View All</a>
-                    </div>
-                    <ul class="category-books">
-                        
-                        <li><a href="/novels/the-son-of-red-fang/">The Son of Red Fang</a></li>
-                        
-                        <li><a href="/novels/crimson-moons-exile/">Crimson Moon&#39;s Exile</a></li>
-                        
-                        <li><a href="/novels/the-last-spirit-wolf/">The Last Spirit Wolf</a></li>
-                        
-                        <li><a href="/novels/the-unwanted-daughters-alpha-king/">The Unwanted Daughter&#39;s Alpha King</a></li>
-                        
-                        <li><a href="/novels/the-rise-of-the-ugly-luna-2/">The Rise Of The Ugly Luna 2</a></li>
-                        
-                    </ul>
-                </div>
-                
-                <div class="category-item">
-                    <div class="category-title">
-                        Contemporary
-                        <a href="/all-novels/">View All</a>
-                    </div>
-                    <ul class="category-books">
-                        
-                        <li><a href="/novels/marrying-her-was-easy-losing-her-was-hell/">Marrying Her Was Easy, Losing Her Was Hell</a></li>
-                        
-                        <li><a href="/novels/rejected-no-more-i-am-way-out-of-your-league-darling/">Rejected No More I Am Way Out Of Your League, Darling!</a></li>
-                        
-                        <li><a href="/novels/too-late-for-regret-the-genius-heiress-who-shines/">Too Late For Regret The Genius Heiress Who Shines</a></li>
-                        
-                        <li><a href="/novels/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive/">Finding Bliss Again My Baby Daddy Is The Most Powerful Man Alive!</a></li>
-                        
-                        <li><a href="/novels/unstoppable-brilliance-she-has-the-world-on-a-leash/">Unstoppable Brilliance She Has The World On A Leash</a></li>
+                        <li><a href="/novels/my-rejected-mate-regrets/">My Rejected Mate Regrets</a></li>
                         
                     </ul>
                 </div>
@@ -1613,7 +1166,7 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
 
     <!-- 隐藏的小说数据，供JavaScript使用 -->
     <script type="application/json" id="novels-data">
-        [{"author": "Unknown Author", "chapters": 102, "cover_url": "/covers/i-slapped-my-fiance-then-married-his-billionaire-nemesis-\u5c01\u9762.png", "description": "...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "I Slapped My Fiance\u0301-Then Married His Billionaire Nemesis", "url": "/novels/i-slapped-my-fiance-then-married-his-billionaire-nemesis/"}, {"author": "Unknown Author", "chapters": 400, "cover_url": "/covers/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3-\u4e66\u7c4d\u5c01\u9762.png", "description": "To most, Verena passed for a small-town clinic doctor; in truth, she worked quiet miracles. Three years after Isaac fell hopelessly for her and kept vigil through lonely nights, a crash left him in a...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "Love\u0027s Prescription The Small-Town Girl Is An Extraordinary Healer 3", "url": "/novels/loves-prescription-the-small-town-girl-is-an-extraordinary-healer-3/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/the-son-of-red-fang-ScreenShot_2025-11-27_104040_145.png", "description": "Alpha werewolves should be cruel and merciless with unquestionable strength and authority, at least that\u2019s what Alpha Charles Redmen believes and he doesn\u2019t hesitate to raise his kids to be the same...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["werewolf", "alpha", "pack"], "title": "The Son of Red Fang", "url": "/novels/the-son-of-red-fang/"}, {"author": "Unknown Author", "chapters": 326, "cover_url": "/covers/once-discarded-now-desired-2-\u4e66\u7c4d\u5c01\u9762.png", "description": "After three years of giving her all to the marriage Eleanor\u0027s reward was nothing but a ruthless divorce! Trouble brewed from her ex-husband\u0027s old lover, and the in-law eagerly piled on. Coffee...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "Once Discarded, Now Desired 2", "url": "/novels/once-discarded-now-desired-2/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/marrying-her-was-easy-losing-her-was-hell-ScreenShot_2025-11-27_104146_596.png", "description": "\"Stella once savored Marc\u0027s devotion, yet his covert cruelty cut deep. She torched their weddin\u0027 portrait at his feet while he sent flirty messages to his mistress. With her chest tight and eyes...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["ocean", "underwater", "marine"], "title": "Marrying Her Was Easy, Losing Her Was Hell", "url": "/novels/marrying-her-was-easy-losing-her-was-hell/"}, {"author": "Unknown Author", "chapters": 104, "cover_url": "/covers/a-goddess-in-disguise-divorce-marriage-domination-ScreenShot_2025-11-27_104258_654.png", "description": "...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "A Goddess In Disguise Divorce, Marriage, Domination", "url": "/novels/a-goddess-in-disguise-divorce-marriage-domination/"}, {"author": "Unknown Author", "chapters": 101, "cover_url": "/covers/the-queen-returns-pampered-by-her-three-powerhouse-brothers-ScreenShot_2025-11-27_104058_981.png", "description": "...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "The Queen Returns Pampered By Her Three Powerhouse Brothers", "url": "/novels/the-queen-returns-pampered-by-her-three-powerhouse-brothers/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/heaven-sent-her-hell-obeyed-her-\u4e66\u7c4d\u5c01\u9762.png", "description": "...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "Heaven Sent Her, Hell Obeyed Her", "url": "/novels/heaven-sent-her-hell-obeyed-her/"}, {"author": "Unknown Author", "chapters": 102, "cover_url": "/covers/the-heiress-spoiled-by-four-brothers-and-one-devilish-ceo-\u4e66\u7c4d\u5c01\u9762.png", "description": "...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "The Heiress Spoiled by Four Brothers and One Devilish CEO", "url": "/novels/the-heiress-spoiled-by-four-brothers-and-one-devilish-ceo/"}, {"author": "Unknown Author", "chapters": 1037, "cover_url": "/covers/rejected-no-more-i-am-way-out-of-your-league-darling-\u4e66\u7c4d\u5c01\u9762.png", "description": "For ten years, Daniela showered her ex-husband with unwavering devotion,only to discover she was just his biggest joke. Feeling humiliated yet determined,she finally divorced him. Three months later,...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["ceo", "billionaire", "contemporary"], "title": "Rejected No More I Am Way Out Of Your League, Darling!", "url": "/novels/rejected-no-more-i-am-way-out-of-your-league-darling/"}, {"author": "Unknown Author", "chapters": 104, "cover_url": "/covers/too-late-for-regret-the-genius-heiress-who-shines-ScreenShot_2025-11-27_104318_455.png", "description": "Blinded in a crash, Cary was rejected by every socialite\u2014except Evelina, who married him without hesitation. Three years later, he regained his sight and ended their marriage. \"We\u2019ve already lost so...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["ceo", "billionaire", "contemporary"], "title": "Too Late For Regret The Genius Heiress Who Shines", "url": "/novels/too-late-for-regret-the-genius-heiress-who-shines/"}, {"author": "Unknown Author", "chapters": 105, "cover_url": "/covers/scorned-ex-wife-queen-of-ashes-\u5c01\u9762.png", "description": "...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "SCORNED EX WIFE  Queen Of Ashes", "url": "/novels/scorned-ex-wife-queen-of-ashes/"}, {"author": "Unknown Author", "chapters": 107, "cover_url": "/covers/irresistible-seduction-married-for-deception-loved-for-real-\u5c01\u9762.png", "description": "Five years into marriage, Hannah caught Vincent slipping into a hotel with his first love-the woman ,au-bu!uiXJa^a Jay pio+ 1ubis auL 1ob0 Ja^au au married her only for her resemblance to his true...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "Irresistible Seduction Married For Deception, Loved For Real", "url": "/novels/irresistible-seduction-married-for-deception-loved-for-real/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive-\u4e66\u7c4d\u5c01\u9762.png", "description": "At their wedding night, Kayla caught her brand-new husband cheating. Reeling and half-drunk, she staggered into the wrong suite and collapsed into a stranger\u0027s arms Sunrise brought a pounding...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["ceo", "billionaire", "contemporary"], "title": "Finding Bliss Again My Baby Daddy Is The Most Powerful Man Alive!", "url": "/novels/finding-bliss-again-my-baby-daddy-is-the-most-powerful-man-alive/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/irresistible-temptation-from-the-meek-wife-to-the-daring-star-\u4e66\u7c4d\u5c01\u9762.png", "description": "One year into marriage, Yvonne realized she was nothing more than a substitute for someone else memory. When his true love reappeared, Julian tossed a divorce contract her way. \"She\u0027s back. We\u0027re...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "Irresistible Temptation From The Meek Wife To The Daring Star", "url": "/novels/irresistible-temptation-from-the-meek-wife-to-the-daring-star/"}, {"author": "Unknown Author", "chapters": 248, "cover_url": "/covers/heartbreak-billionairehe-should-never-have-let-go-ScreenShot_2025-11-27_104212_338.png", "description": "Sunlit hours found their affection glimmering while moonlit nights ignited reckless desire. But when Brandon learned his beloved might last only half a year, he coolly handed Millie divorce papers,...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "Heartbreak Billionaire\uff1aHe should never have Let Go", "url": "/novels/heartbreak-billionairehe-should-never-have-let-go/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen-ScreenShot_2025-11-27_104240_384.png", "description": "Arabella, a state-trained prodigy, won freedom after seven brutal years. Back home, she found he aunt basking in her late parents\u0027 mansion while hei twin sister scrounged for scraps. Fury ignited her...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "Brilliance Unmasked\uff1a The Cold-Blooded Tycoon Wants His Vengeful Queen", "url": "/novels/brilliance-unmasked-the-cold-blooded-tycoon-wants-his-vengeful-queen/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/unstoppable-brilliance-she-has-the-world-on-a-leash-ScreenShot_2025-11-27_104017_490.png", "description": "Hidden for years by the state despite a fortune worth billions, Grace bounced through three foster homes. At her fourth stop, the wealthy Holden family showered her with care, sparking spiteful...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["ceo", "billionaire", "contemporary"], "title": "Unstoppable Brilliance She Has The World On A Leash", "url": "/novels/unstoppable-brilliance-she-has-the-world-on-a-leash/"}, {"author": "Unknown Author", "chapters": 162, "cover_url": "/covers/crimson-moons-exile-ScreenShot_2025-11-27_103934_971.png", "description": "A fallen prince. A human marked for death. An eternal vow that shatters worlds.\nWhen Kaizen, a monstrous heir to hell, saves teacher Willow from his own pack, he becomes a traitor. Hunted for murder,...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["werewolf", "alpha", "pack"], "title": "Crimson Moon\u0027s Exile", "url": "/novels/crimson-moons-exile/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/the-last-spirit-wolf-\u4e66\u7c4d\u5c01\u9762.png", "description": "\u201cINCOMING! 10 Injured Wolves and 3 Lycans! \u201c Sophie, my bestie, our alpha yells in my head \u201cLYCANS?! Did you just say LYCANS?! \u201cYes Vera! They are coming! Get your people ready.\u201d I couldn\u2019t believe...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["werewolf", "alpha", "pack"], "title": "The Last Spirit Wolf", "url": "/novels/the-last-spirit-wolf/"}, {"author": "Unknown Author", "chapters": 99, "cover_url": "/covers/the-unwanted-daughters-alpha-king-\u5c01\u9762.png", "description": "The door behind me opened. Alpha Adrian was smiling, looking at the man now standing before us both, but his face fell the second his eyes landed on me, shock and disgust filling his gaze. \u2018Alpha...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["werewolf", "alpha", "pack"], "title": "The Unwanted Daughter\u0027s Alpha King", "url": "/novels/the-unwanted-daughters-alpha-king/"}, {"author": "Unknown Author", "chapters": 241, "cover_url": "/covers/the-rise-of-the-ugly-luna-2-\u4e66\u7c4d\u5c01\u9762.png", "description": "Lyric had spent her life being hated. Bullied for her scarred face and hated by everyone-including her own mate-she was always told she was ugly. Her mate only kept her around to gain territory, and...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["werewolf", "alpha", "pack"], "title": "The Rise Of The Ugly Luna 2", "url": "/novels/the-rise-of-the-ugly-luna-2/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/hell-in-his-eyes-heaven-in-his-kiss-\u4e66\u7c4d\u5c01\u9762.png", "description": "Gabriela learned her boyfriend had been two-timing her and writing her off as a brainless bimbo, so she drowned her heartache in reckless adventure. One sultry blackout night she tumbled into bed...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["ceo", "billionaire", "contemporary"], "title": "Hell In His Eyes, Heaven In His Kiss", "url": "/novels/hell-in-his-eyes-heaven-in-his-kiss/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/the-humble-ex-wife-is-now-a-brillia-ScreenShot_2025-11-27_104122_502.png", "description": "For three quiet, patient years, Christina kept house,only to be coldly discarded by the man she once trusted.\n\n\n\nInstead,he paraded a new lover, making her the punchline of every town...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "The Humble Ex-wife Is Now A Brillia", "url": "/novels/the-humble-ex-wife-is-now-a-brillia/"}, {"author": "Unknown Author", "chapters": 100, "cover_url": "/covers/married-to-an-ugly-husband-no-\u4e66\u7c4d\u5c01\u9762.png", "description": "My malicious stepsister threatened me with my brother\u0027s life, forcing me to marry a man rumored to be unspeakably ugly. I had no choice but to comply. However, after the wedding, I discovered that...", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["ocean", "underwater", "marine"], "title": "Married to an Ugly Husband No!", "url": "/novels/married-to-an-ugly-husband-no/"}, {"author": "Unknown Author", "chapters": 105, "cover_url": "/covers/she-was-the-joke-now-shes-the-queen-\u4e66\u7c4d\u5c01\u9762.png", "description": "Two years of marriage left Brinley questioning everything, her supposed happiness revealed as nothing but sham. Abandoning her past for Colin, she discovered onl betrayal and a counterfeit wedding....", "last_updated": "2025-11-28", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "She Was The Joke, Now She\u0027s The Queen", "url": "/novels/she-was-the-joke-now-shes-the-queen/"}]
+        [{"author": "Unknown Author", "chapters": 101, "cover_url": "/covers/the-betrayed-wifes-revenge-marrying-the-ceo-\u4e66\u7c4d\u5c01\u9762.png", "description": "\"Can you and Daddy get divorced?\" Those six words from my seven-year-old son shattered my world, and I never imagined he and my husband would choose another woman over me, leaving me broken and...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "ceo", "billionaire"], "title": "The Betrayed Wife\u0027s Revenge Marrying the CEO", "url": "/novels/the-betrayed-wifes-revenge-marrying-the-ceo/"}, {"author": "Unknown Author", "chapters": 300, "cover_url": "/covers/the-queens-rebirth-ScreenShot_2025-10-17_141918_778.png", "description": "Reborn amid viral infamy, Lucy White dismantles her \"talentless heiress\" narrative with guzheng virtuosity, wilderness grit, and chef-level precision. As mockery turns to awe, A-lister Ethan Smith...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "ceo", "billionaire"], "title": "The Queen\u0027s Rebirth", "url": "/novels/the-queens-rebirth/"}, {"author": "Unknown Author", "chapters": 101, "cover_url": "/covers/marriage-by-contract-with-a-billionaire-\u4e66\u7c4d\u5c01\u9762.png", "description": "I never imagined I\u2019d end up as Mrs. Alexander Kane. The cold, enigmatic billionaire barely notices anyone\u2014let alone me. But when his grandfather\u0027s will demands that he marry and have a child within...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "ceo", "billionaire"], "title": "Marriage By Contract with a Billionaire", "url": "/novels/marriage-by-contract-with-a-billionaire/"}, {"author": "Unknown Author", "chapters": 300, "cover_url": "/covers/my-phone-traveled-with-me-to-the-80s-ScreenShot_2025-10-17_142033_807.png", "description": "After a freak accident, Emily Johnson transmigrates into a spoiled novel antagonist fated to abandon her military husband and twin sons, only to die destitute. Defying the plot, she uses a mysterious...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "My Phone Traveled with Me to the-80s", "url": "/novels/my-phone-traveled-with-me-to-the-80s/"}, {"author": "Unknown Author", "chapters": 500, "cover_url": "/covers/the-hidden-heiress-divorces-the-ceo-wechat_2025-09-23_154056_444.png", "description": "I bled for three years as Nathan\u0027s invisible wife. When the plane crash exposed his mistress, I reclaimed my birthright as Kingsley heiress. Now his corporation trembles before my jewels and...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "The Hidden Heiress Divorces the CEO", "url": "/novels/the-hidden-heiress-divorces-the-ceo/"}, {"author": "Unknown Author", "chapters": 300, "cover_url": "/covers/the-billionaires-forbidden-contract-ScreenShot_2025-10-31_143450_382.png", "description": "A destitute student enters a dangerous bargain with a tech tycoon to uncover corporate secrets, but their forbidden attraction threatens to destroy both their revenge plot and hearts. As power plays...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "ceo", "billionaire"], "title": "The Billionaire\u0027s Forbidden Contract", "url": "/novels/the-billionaires-forbidden-contract/"}, {"author": "Unknown Author", "chapters": 507, "cover_url": "/covers/runaway-heiress-reborn-crushing-ceo-ex-wechat_2025-09-23_153718_051.png", "description": "As the invisible wife of tech tycoon Alexander, I endured his cold disdain for years. But when he gifted his mistress the jewels I craved, I served divorce papers and reclaimed my crown as AI\u0027s...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["ceo", "billionaire", "contemporary"], "title": "Runaway Heiress Reborn\uff1a Crushing CEO Ex", "url": "/novels/runaway-heiress-reborn-crushing-ceo-ex/"}, {"author": "Unknown Author", "chapters": 984, "cover_url": "/covers/the-billionaires-unwanted-ex-wife-is-the-genius-tycoon-ScreenShot_2025-10-31_144406_261.png", "description": "I was Nathaniel Falcon\u2019s unwanted wife\u2014a \"country bumpkin\" he ignored for years. But he never knew I\u2019m Dr. Sinclair, the genius surgeon who saved his life. Now that he\u2019s chasing his ex, I\u2019ll make him...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "The Billionaire\u0027s Unwanted Ex-wife is the Genius Tycoon", "url": "/novels/the-billionaires-unwanted-ex-wife-is-the-genius-tycoon/"}, {"author": "Unknown Author", "chapters": 301, "cover_url": "/covers/the-fallen-heiress-gambit-ScreenShot_2025-10-17_141821_715.png", "description": "Evelyn Sinclair thought marrying into the Blackwood dynasty would secure her future. Instead, she awakens to a nightmare\u2014her \"husband\" Nathan is secretly funding her rival, her best friend is a spy,...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "The Fallen Heiress\u0027 Gambit", "url": "/novels/the-fallen-heiress-gambit/"}, {"author": "Unknown Author", "chapters": 107, "cover_url": "/covers/irresistible-seduction-married-for-deception-loved-for-real-\u5c01\u9762.png", "description": "...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "Irresistible Seduction Married For Deception, Loved For Real", "url": "/novels/irresistible-seduction-married-for-deception-loved-for-real/"}, {"author": "Unknown Author", "chapters": 248, "cover_url": "/covers/heartbreak-billionairehe-should-never-have-let-go-\u4e66\u7c4d\u5c01\u9762.png", "description": "Sunlit hours found their affection glimmering while moonlit nights ignited reckless desire. But when Brandon learned his beloved might last only half a year, he coolly handed Millie divorce papers,...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "Heartbreak Billionaire\uff1aHe should never have Let Go", "url": "/novels/heartbreak-billionairehe-should-never-have-let-go/"}, {"author": "Unknown Author", "chapters": 498, "cover_url": "/covers/my-rejected-mate-regrets-wechat_2025-09-23_153651_246.png", "description": "...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "My Rejected Mate Regrets", "url": "/novels/my-rejected-mate-regrets/"}, {"author": "Unknown Author", "chapters": 102, "cover_url": "/covers/the-ex-ceo-husband-went-mad-post-divorce-\u5236\u4f5c\u5c01\u9762\u56fe\u7247 (4).png", "description": "\uff08There is a lot of sexual and stimulating content, minors are not allowed to read!!!\uff09 She prepared for pregnancy and did her best to take care of her drunken husband. Afterwards, her husband kicked...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "The ex-CEO husband went mad post-divorce", "url": "/novels/the-ex-ceo-husband-went-mad-post-divorce/"}, {"author": "Unknown Author", "chapters": 322, "cover_url": "/covers/the-billionaires-regrethis-adopted-fianc\u00e9e-fled-ScreenShot_2025-10-31_143504_446.png", "description": "I was Alexander Kingsley\u0027s perfect porcelain doll until I found his white dresses hid bloodstained secrets. Now as an investigative journalist, I\u0027ll expose his billion-dollar empire\u0027s lies \u2013 even if...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance"], "title": "The Billionaire\u0027s Regret\uff1aHis Adopted Fianc\u00e9e Fled", "url": "/novels/the-billionaires-regrethis-adopted-fianc\u00e9e-fled/"}, {"author": "Unknown Author", "chapters": 102, "cover_url": "/covers/the-billionaires-sudden-bride-\u4e66\u7c4d\u5c01\u9762.png", "description": "...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "The Billionaire\u0027s Sudden Bride", "url": "/novels/the-billionaires-sudden-bride/"}, {"author": "Unknown Author", "chapters": 500, "cover_url": "/covers/his-ex-wifes-secret-ScreenShot_2025-10-22_121038_184.png", "description": "I bled for three years as Nathaniel\u0027s invisible wife. When his pregnant mistress moved in, I activated my secret identity - the hacker who built his empire. Now with his twins in my womb and his...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "His Ex-Wife\u0027s Secret", "url": "/novels/his-ex-wifes-secret/"}, {"author": "Unknown Author", "chapters": 675, "cover_url": "/covers/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex-\u5c01\u9762.png", "description": "...", "last_updated": "2026-01-06", "progress": 0, "rating": 4.5, "tags": ["romance", "fantasy"], "title": "I just found out I\u2019m pregnant and my husband\u2019s checking into a hotel with his ex", "url": "/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/"}]
     </script>
 
     <!-- Footer -->
@@ -1661,6 +1214,111 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
     </footer>
 
     <script>
+        // ===== Facebook Tracking Parameters Preservation System =====
+        
+        // Facebook 和其他渠道的追踪参数列表
+        const TRACKING_PARAMS = [
+            'fbclid', 'utm_source', 'utm_medium', 'utm_campaign', 
+            'utm_term', 'utm_content', 'utm_id', 'gclid', 'msclkid', 'ttclid'
+        ];
+        
+        function extractTrackingParams(url) {
+            const urlObj = new URL(url, window.location.origin);
+            const params = {};
+            let hasParams = false;
+            
+            TRACKING_PARAMS.forEach(param => {
+                const value = urlObj.searchParams.get(param);
+                if (value) {
+                    params[param] = value;
+                    hasParams = true;
+                }
+            });
+            
+            return hasParams ? params : null;
+        }
+        
+        function saveCurrentTrackingParams() {
+            const currentParams = extractTrackingParams(window.location.href);
+            
+            if (currentParams) {
+                localStorage.setItem('trackingParams', JSON.stringify(currentParams));
+                localStorage.setItem('trackingParamsTimestamp', Date.now().toString());
+                console.log('📊 [首页] 保存新的追踪参数:', currentParams);
+                return true;
+            }
+            
+            return false;
+        }
+        
+        function getStoredTrackingParams() {
+            try {
+                const paramsStr = localStorage.getItem('trackingParams');
+                const timestamp = localStorage.getItem('trackingParamsTimestamp');
+                
+                if (!paramsStr || !timestamp) return null;
+                
+                const age = Date.now() - parseInt(timestamp);
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+                
+                if (age > twentyFourHours) {
+                    localStorage.removeItem('trackingParams');
+                    localStorage.removeItem('trackingParamsTimestamp');
+                    return null;
+                }
+                
+                return JSON.parse(paramsStr);
+            } catch (error) {
+                return null;
+            }
+        }
+        
+        function addTrackingParams(url) {
+            try {
+                const urlObj = new URL(url, window.location.origin);
+                
+                const hasExistingParams = TRACKING_PARAMS.some(param => 
+                    urlObj.searchParams.has(param)
+                );
+                
+                if (hasExistingParams) {
+                    return url;
+                }
+                
+                const storedParams = getStoredTrackingParams();
+                
+                if (storedParams) {
+                    Object.keys(storedParams).forEach(key => {
+                        urlObj.searchParams.set(key, storedParams[key]);
+                    });
+                    return urlObj.toString();
+                }
+                
+                return url;
+            } catch (error) {
+                return url;
+            }
+        }
+        
+        function initTrackingSystem() {
+            saveCurrentTrackingParams();
+            
+            // 为所有小说链接添加追踪参数
+            document.querySelectorAll('a[href*="/novels/"]').forEach(link => {
+                if (link.href) {
+                    const originalHref = link.href;
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        window.location.href = addTrackingParams(originalHref);
+                    });
+                }
+            });
+            
+            console.log('📊 [首页] 追踪参数系统已初始化');
+        }
+        
+        document.addEventListener('DOMContentLoaded', initTrackingSystem);
+        
         // Simulate loading effect
         document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.novel-card');
@@ -1840,7 +1498,7 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
 
         // Recommended For You - Read More 功能
         let allNovels = [];
-        let currentIndex = 30; // 已经显示了初始的30本
+        let currentIndex = 8; // 已经显示了初始的8本
         const batchSize = 8;
 
         function loadNovelsData() {
@@ -1849,10 +1507,10 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
                 if (dataElement && dataElement.textContent.trim()) {
                     allNovels = JSON.parse(dataElement.textContent);
                     console.log('成功加载小说数据：', allNovels.length, '本');
-                    // 随机打乱小说顺序，但保持前30本不变（已经在模板中显示）
-                    const remainingNovels = allNovels.slice(30);
+                    // 随机打乱小说顺序，但保持前8本不变（已经在模板中显示）
+                    const remainingNovels = allNovels.slice(8);
                     shuffleArray(remainingNovels);
-                    allNovels = [...allNovels.slice(0, 30), ...remainingNovels];
+                    allNovels = [...allNovels.slice(0, 8), ...remainingNovels];
                 } else {
                     console.error('未找到小说数据或数据为空');
                     allNovels = [];
@@ -1952,7 +1610,7 @@ Instead,he paraded a new lover, making her the punchline of every town...</p>
                 setTimeout(() => {
                     console.log('小说数据加载状态：', allNovels.length, '本小说');
                     // 只有在确实没有更多小说时才隐藏按钮
-                    if (allNovels.length <= 30) {
+                    if (allNovels.length <= 8) {
                         readMoreBtn.style.display = 'none';
                         console.log('小说数量不足，隐藏Read More按钮');
                     } else {

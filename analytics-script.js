@@ -1,498 +1,142 @@
-// Google Apps Script 代码 - 网站访问统计系统(每日独立表格版本)
-// 主控制表格 ID: 1cEMYvW2XSo28ejNGKDUT3EEJDrar_zYStIhNqToso0c
-// 部署ID: AKfycbyF5Vot_R9Rq_hoZmcPeK_-2rY9tPphz9jLsru1KX7z-krv7-LIJ90fFHSJ0tNJbPQX
-// 部署URL: https://script.google.com/macros/s/AKfycbyF5Vot_R9Rq_hoZmcPeK_-2rY9tPphz9jLsru1KX7z-krv7-LIJ90fFHSJ0tNJbPQX/exec
-// 
-// 架构说明：
-// - 主表格：用于控制台、统计汇总、表格索引
-// - 每日表格：每天自动创建新的独立表格，包含当天的详细数据和广告引导数据
-// - 表格命名：seo-2025-01-15
-// - 文件夹：所有每日表格存放在"网站统计数据"文件夹中
-
-// ==================== 配置常量 ====================
-
-const MAIN_SPREADSHEET_ID = '1cEMYvW2XSo28ejNGKDUT3EEJDrar_zYStIhNqToso0c';
-const DATA_FOLDER_NAME = '网站统计数据';
-const SPREADSHEET_PREFIX = 'seo-';
-
-// ==================== 主入口函数 ====================
+// Google Apps Script 代码 - 网站访问统计系统
+// Spreadsheet ID: 1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4
 
 function doPost(e) {
   try {
+    console.log('=== doPost 接收到请求 ===');
+    console.log('Request content:', e.postData.contents);
+    
+    const spreadsheet = SpreadsheetApp.openById('1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4');
     const data = JSON.parse(e.postData.contents);
     const eventType = data.eventType || 'page_visit';
     
-    // 获取或创建今日表格
-    const dateString = getDateString();
-    const dailySpreadsheet = getOrCreateDailySpreadsheet(dateString);
+    console.log('事件类型:', eventType);
+    console.log('数据内容:', JSON.stringify(data));
     
     if (eventType === 'ad_guide_triggered') {
-      handleAdGuideEvent(dailySpreadsheet, data);
-    } else if (eventType === 'ad_click') {
-      handleAdClickEvent(dailySpreadsheet, data);
+      console.log('>>> 处理广告引导事件');
+      handleAdGuideEvent(spreadsheet, data);
     } else {
-      handlePageVisitEvent(dailySpreadsheet, data);
+      console.log('>>> 处理页面访问事件');
+      handlePageVisitEvent(spreadsheet, data);
     }
     
-    // 1%概率更新主控制台统计
-    if (Math.random() < 0.01) {
-      updateMainDashboard();
-    }
-    
-    // 0.5%概率自动清理重复索引（平均每200次请求清理一次）
-    if (Math.random() < 0.005) {
-      cleanupDuplicateIndexRecords();
-    }
-    
+    console.log('=== 处理完成 ===');
     return ContentService.createTextOutput(JSON.stringify({status: 'success'})).setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('❌ Error:', error);
+    console.error('Error stack:', error.stack);
     return ContentService.createTextOutput(JSON.stringify({status: 'error', message: error.toString()})).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
 function doGet(e) {
-  return ContentService.createTextOutput('Analytics endpoint is working! (Daily Spreadsheets Version)').setMimeType(ContentService.MimeType.TEXT);
+  return ContentService.createTextOutput('Analytics endpoint is working!').setMimeType(ContentService.MimeType.TEXT);
 }
 
-// ==================== 表格管理核心函数 ====================
 
-/**
- * 获取或创建每日独立表格（带并发锁保护）
- * @param {string} dateString - 日期字符串（格式：2025-01-15）
- * @return {Spreadsheet} 每日表格对象
- */
-function getOrCreateDailySpreadsheet(dateString) {
-  const spreadsheetName = SPREADSHEET_PREFIX + dateString;
-  
-  // 1. 先快速查找索引（无锁）
-  const mainSpreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET_ID);
-  const indexSheet = getOrCreateIndexSheet(mainSpreadsheet);
-  let spreadsheetId = findSpreadsheetIdFromIndex(indexSheet, dateString);
-  
-  if (spreadsheetId) {
-    try {
-      return SpreadsheetApp.openById(spreadsheetId);
-    } catch (e) {
-      console.log('索引中的表格ID无效，将重新查找');
-    }
-  }
-  
-  // 2. 获取锁，防止并发创建（最多等待10秒）
-  const lock = LockService.getScriptLock();
-  try {
-    lock.waitLock(10000);
-    
-    // 再次检查索引（可能其他线程已创建）
-    spreadsheetId = findSpreadsheetIdFromIndex(indexSheet, dateString);
-    if (spreadsheetId) {
-      try {
-        lock.releaseLock();
-        return SpreadsheetApp.openById(spreadsheetId);
-      } catch (e) {
-        console.log('索引中的表格ID无效');
-      }
-    }
-    
-    // 3. 搜索文件夹中是否存在同名表格（关键：防止创建重复文件）
-    const folder = getOrCreateDataFolder();
-    const files = folder.getFilesByName(spreadsheetName);
-    
-    if (files.hasNext()) {
-      const file = files.next();
-      const spreadsheet = SpreadsheetApp.openById(file.getId());
-      // 找到文件后添加到索引（允许重复索引，不影响数据）
-      addToIndex(indexSheet, dateString, file.getId(), file.getUrl());
-      lock.releaseLock();
-      return spreadsheet;
-    }
-    
-    // 4. 创建新的每日表格
-    const newSpreadsheet = SpreadsheetApp.create(spreadsheetName);
-    const newFile = DriveApp.getFileById(newSpreadsheet.getId());
-    
-    // 移动到指定文件夹
-    folder.addFile(newFile);
-    DriveApp.getRootFolder().removeFile(newFile);
-    
-    // 初始化表格结构
-    initializeDailySpreadsheet(newSpreadsheet, dateString);
-    
-    // 添加到索引（允许重复索引，不影响数据）
-    addToIndex(indexSheet, dateString, newSpreadsheet.getId(), newSpreadsheet.getUrl());
-    
-    lock.releaseLock();
-    return newSpreadsheet;
-    
-  } catch (e) {
-    console.error('获取锁失败:', e);
-    // 如果获取锁失败，尝试直接从文件夹查找
-    const folder = getOrCreateDataFolder();
-    const files = folder.getFilesByName(spreadsheetName);
-    if (files.hasNext()) {
-      return SpreadsheetApp.openById(files.next().getId());
-    }
-    throw new Error('无法创建或获取每日表格');
-  }
-}
+// ==================== 广告引导事件处理 ====================
 
-/**
- * 初始化每日表格的基本结构
- */
-function initializeDailySpreadsheet(spreadsheet, dateString) {
-  // 删除默认的Sheet1
-  const defaultSheet = spreadsheet.getSheetByName('Sheet1');
-  if (defaultSheet) {
-    spreadsheet.deleteSheet(defaultSheet);
-  }
+function handleAdGuideEvent(spreadsheet, data) {
+  console.log('>>> handleAdGuideEvent 开始执行');
+  console.log('接收到的数据:', JSON.stringify(data));
   
-  // 创建"页面访问"sheet
-  const visitSheet = spreadsheet.insertSheet('页面访问');
-  visitSheet.getRange(1, 1, 1, 6).setValues([
-    ['时间', '访问页面', '用户属性', 'IP地址', '用户来源分类', '完整来源URL']
-  ]);
-  const visitHeader = visitSheet.getRange(1, 1, 1, 6);
-  visitHeader.setBackground('#4285f4').setFontColor('white').setFontWeight('bold');
-  visitSheet.setColumnWidth(1, 150);  // 时间
-  visitSheet.setColumnWidth(2, 300);  // 访问页面
-  visitSheet.setColumnWidth(3, 200);  // 用户属性
-  visitSheet.setColumnWidth(4, 120);  // IP地址
-  visitSheet.setColumnWidth(5, 250);  // 用户来源分类
-  visitSheet.setColumnWidth(6, 400);  // 完整来源URL
+  const dateString = getDateString();
+  console.log('日期字符串:', dateString);
   
-  // 创建"广告引导"sheet
-  const adGuideSheet = spreadsheet.insertSheet('广告引导');
-  adGuideSheet.getRange(1, 1, 1, 10).setValues([
-    ['时间', '访问页面', '用户属性', 'IP地址', '累计广告数', '当前页广告数', '触发次数', '最大触发次数', '事件时间戳', '用户来源']
-  ]);
-  const adGuideHeader = adGuideSheet.getRange(1, 1, 1, 10);
-  adGuideHeader.setBackground('#FF6B6B').setFontColor('white').setFontWeight('bold');
-  adGuideSheet.setColumnWidth(1, 150);
-  adGuideSheet.setColumnWidth(2, 300);
-  adGuideSheet.setColumnWidth(3, 200);
-  adGuideSheet.setColumnWidth(4, 120);
-  adGuideSheet.setColumnWidth(5, 100);
-  adGuideSheet.setColumnWidth(6, 120);
-  adGuideSheet.setColumnWidth(7, 100);
-  adGuideSheet.setColumnWidth(8, 120);
-  adGuideSheet.setColumnWidth(9, 180);
-  adGuideSheet.setColumnWidth(10, 250);
-  
-  // 创建"广告点击"sheet
-  const adClickSheet = spreadsheet.insertSheet('广告点击');
-  adClickSheet.getRange(1, 1, 1, 13).setValues([
-    ['时间', '小说标题', '章节号', '页面URL', '广告位ID', '广告位置(px)', '滚动深度', '用户IP', '设备类型', '屏幕尺寸', '停留时长(秒)', '历史累计点击', '点击来源']
-  ]);
-  const adClickHeader = adClickSheet.getRange(1, 1, 1, 13);
-  adClickHeader.setBackground('#34A853').setFontColor('white').setFontWeight('bold');
-  adClickSheet.setColumnWidth(1, 150);   // 时间
-  adClickSheet.setColumnWidth(2, 200);   // 小说标题
-  adClickSheet.setColumnWidth(3, 80);    // 章节号
-  adClickSheet.setColumnWidth(4, 300);   // 页面URL
-  adClickSheet.setColumnWidth(5, 120);   // 广告位ID
-  adClickSheet.setColumnWidth(6, 100);   // 广告位置
-  adClickSheet.setColumnWidth(7, 100);   // 滚动深度
-  adClickSheet.setColumnWidth(8, 120);   // IP地址
-  adClickSheet.setColumnWidth(9, 100);   // 设备类型
-  adClickSheet.setColumnWidth(10, 120);  // 屏幕尺寸
-  adClickSheet.setColumnWidth(11, 100);  // 停留时长
-  adClickSheet.setColumnWidth(12, 120);  // 历史累计点击
-  adClickSheet.setColumnWidth(13, 120);  // 点击来源
-  
-  // 创建"当日统计"概览sheet
-  const summarySheet = spreadsheet.insertSheet('📊当日统计', 0);
-  initializeDailySummary(summarySheet, dateString);
-}
-
-/**
- * 初始化当日统计概览
- */
-function initializeDailySummary(sheet, dateString) {
-  sheet.getRange(1, 1, 1, 3).merge();
-  sheet.getRange(1, 1).setValue(`📊 ${dateString} 访问统计概览`);
-  sheet.getRange(1, 1).setBackground('#1a73e8').setFontColor('white').setFontSize(14).setFontWeight('bold');
-  
-  const headers = [
-    ['统计项目', '数值', '说明'],
-    ['页面访问次数', 0, '当天的总访问次数'],
-    ['广告引导触发', 0, '广告引导弹窗触发次数'],
-    ['广告点击次数', 0, '当天的广告点击次数'],
-    ['独立IP数量', 0, '去重后的访问IP数量'],
-    ['最后更新时间', '', '数据最后更新的时间']
-  ];
-  
-  sheet.getRange(2, 1, headers.length, 3).setValues(headers);
-  sheet.getRange(2, 1, 1, 3).setBackground('#4285f4').setFontColor('white').setFontWeight('bold');
-  
-  sheet.setColumnWidth(1, 150);
-  sheet.setColumnWidth(2, 100);
-  sheet.setColumnWidth(3, 250);
-}
-
-/**
- * 获取或创建数据文件夹
- */
-function getOrCreateDataFolder() {
-  const folders = DriveApp.getFoldersByName(DATA_FOLDER_NAME);
-  
-  if (folders.hasNext()) {
-    return folders.next();
-  }
-  
-  return DriveApp.createFolder(DATA_FOLDER_NAME);
-}
-
-/**
- * 获取或创建主表格的索引sheet
- */
-function getOrCreateIndexSheet(mainSpreadsheet) {
-  let indexSheet = mainSpreadsheet.getSheetByName('📑表格索引');
-  
-  if (!indexSheet) {
-    indexSheet = mainSpreadsheet.insertSheet('📑表格索引', 0);
-    
-    // 设置表头
-    indexSheet.getRange(1, 1, 1, 4).setValues([
-      ['日期', '表格ID', '表格链接', '创建时间']
-    ]);
-    indexSheet.getRange(1, 1, 1, 4).setBackground('#34a853').setFontColor('white').setFontWeight('bold');
-    
-    indexSheet.setColumnWidth(1, 120);
-    indexSheet.setColumnWidth(2, 300);
-    indexSheet.setColumnWidth(3, 400);
-    indexSheet.setColumnWidth(4, 180);
-  }
-  
-  return indexSheet;
-}
-
-/**
- * 从索引中查找表格ID
- */
-function findSpreadsheetIdFromIndex(indexSheet, dateString) {
-  const data = indexSheet.getDataRange().getValues();
-  
-  for (let i = 1; i < data.length; i++) {
-    if (data[i][0] === dateString) {
-      return data[i][1];
-    }
-  }
-  
-  return null;
-}
-
-/**
- * 添加表格到索引（简单添加，允许重复）
- */
-function addToIndex(indexSheet, dateString, spreadsheetId, spreadsheetUrl) {
-  // 简单添加，不做复杂检查
-  // 重复索引不影响数据收集，只是显示上有重复，可以定期清理
-  const newRow = [
-    dateString,
-    spreadsheetId,
-    spreadsheetUrl,
-    getTimeString()
-  ];
-  
-  indexSheet.appendRow(newRow);
-  console.log(`添加索引: ${dateString} -> ${spreadsheetId}`);
-}
-
-// ==================== 数据写入函数 ====================
-
-/**
- * 处理页面访问事件
- */
-function handlePageVisitEvent(dailySpreadsheet, data) {
-  const visitSheet = dailySpreadsheet.getSheetByName('页面访问');
-  
-  if (!visitSheet) {
-    console.error('页面访问 sheet不存在！');
-    return;
-  }
+  const adGuideSheet = getOrCreateAdGuideSheet(spreadsheet, dateString);
+  console.log('Sheet 名称:', adGuideSheet.getName());
   
   const rowData = [
-    getTimeString(),                        // 时间
-    data.page || '',                        // 访问页面
-    data.userAgent || '',                   // 用户属性
-    data.userIP || 'Unknown',               // IP地址
-    data.referrer || 'Direct',              // 用户来源分类
-    data.referrerUrl || 'Direct/None'       // 完整来源URL
+    getTimeString(),              // 时间
+    data.page || '',              // 访问页面
+    data.userAgent || '',         // 用户属性
+    data.userIP || 'Unknown',     // IP地址
+    data.totalAdsSeen || 0,       // 累计广告数
+    data.currentPageAds || 0,     // 当前页广告数
+    data.triggerCount || 0,       // 触发次数
+    data.maxTriggers || 3,        // 最大触发次数
+    data.timestamp || ''          // 事件时间戳
   ];
   
-  visitSheet.appendRow(rowData);
-  
-  // 5%概率更新当日统计
-  if (Math.random() < 0.05) {
-    updateDailySummary(dailySpreadsheet);
-  }
-}
-
-/**
- * 处理广告引导事件
- */
-function handleAdGuideEvent(dailySpreadsheet, data) {
-  const adGuideSheet = dailySpreadsheet.getSheetByName('广告引导');
-  
-  if (!adGuideSheet) {
-    console.error('广告引导sheet不存在！');
-    return;
-  }
-  
-  const rowData = [
-    getTimeString(),
-    data.page || '',
-    data.userAgent || '',
-    data.userIP || 'Unknown',
-    data.totalAdsSeen || 0,
-    data.currentPageAds || 0,
-    data.triggerCount || 0,
-    data.maxTriggers || 3,
-    data.timestamp || ''
-  ];
-  
+  console.log('准备插入的数据:', JSON.stringify(rowData));
   adGuideSheet.appendRow(rowData);
+  console.log('✅ 广告引导事件已记录到表格');
 }
 
-// ==================== 统计更新函数 ====================
-
-/**
- * 更新每日表格的统计概览
- */
-function updateDailySummary(dailySpreadsheet) {
-  try {
-    const summarySheet = dailySpreadsheet.getSheetByName('📊当日统计');
-    if (!summarySheet) return;
-    
-    // 统计页面访问
-    const visitSheet = dailySpreadsheet.getSheetByName('页面访问');
-    const visitCount = visitSheet ? Math.max(0, visitSheet.getDataRange().getNumRows() - 1) : 0;
-    
-    // 统计广告引导
-    const adGuideSheet = dailySpreadsheet.getSheetByName('广告引导');
-    const adGuideCount = adGuideSheet ? Math.max(0, adGuideSheet.getDataRange().getNumRows() - 1) : 0;
-    
-    // 统计广告点击
-    const adClickSheet = dailySpreadsheet.getSheetByName('广告点击');
-    const adClickCount = adClickSheet ? Math.max(0, adClickSheet.getDataRange().getNumRows() - 1) : 0;
-    
-    // 统计独立IP
-    let uniqueIPs = 0;
-    if (visitSheet && visitCount > 0) {
-      const ipData = visitSheet.getRange(2, 4, visitCount, 1).getValues();
-      const ipSet = new Set();
-      ipData.forEach(row => {
-        const ip = row[0];
-        if (ip && ip !== 'Unknown' && ip !== 'Error') {
-          ipSet.add(ip);
-        }
-      });
-      uniqueIPs = ipSet.size;
-    }
-    
-    // 更新数据
-    summarySheet.getRange(3, 2).setValue(visitCount);
-    summarySheet.getRange(4, 2).setValue(adGuideCount);
-    summarySheet.getRange(5, 2).setValue(adClickCount);
-    summarySheet.getRange(6, 2).setValue(uniqueIPs);
-    summarySheet.getRange(7, 2).setValue(getTimeString());
-  } catch (error) {
-    console.error('更新每日统计失败:', error);
-  }
-}
-
-/**
- * 更新主控制台（汇总所有表格的统计）
- */
-function updateMainDashboard() {
-  try {
-    const mainSpreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET_ID);
-    
-    let dashboardSheet = mainSpreadsheet.getSheetByName('📊总控制台');
-    if (!dashboardSheet) {
-      dashboardSheet = mainSpreadsheet.insertSheet('📊总控制台', 0);
-      initializeMainDashboard(dashboardSheet);
-    }
-    
-    // 获取索引sheet
-    const indexSheet = mainSpreadsheet.getSheetByName('📑表格索引');
-    if (!indexSheet) return;
-    
-    // 统计所有表格
-    const indexData = indexSheet.getDataRange().getValues();
-    let totalVisits = 0;
-    let totalAdGuides = 0;
-    let activeDays = 0;
-    let todayVisits = 0;
-    
-    const today = getDateString();
-    
-    for (let i = 1; i < indexData.length; i++) {
-      const dateString = indexData[i][0];
-      const spreadsheetId = indexData[i][1];
-      
-      if (!spreadsheetId) continue;
-      
-      try {
-        const dailySpreadsheet = SpreadsheetApp.openById(spreadsheetId);
-        const visitSheet = dailySpreadsheet.getSheetByName('页面访问');
-        const adGuideSheet = dailySpreadsheet.getSheetByName('广告引导');
-        
-        if (visitSheet) {
-          const visitCount = Math.max(0, visitSheet.getDataRange().getNumRows() - 1);
-          totalVisits += visitCount;
-          
-          if (visitCount > 0) activeDays++;
-          if (dateString === today) todayVisits = visitCount;
-        }
-        
-        if (adGuideSheet) {
-          totalAdGuides += Math.max(0, adGuideSheet.getDataRange().getNumRows() - 1);
-        }
-      } catch (e) {
-        console.log(`无法打开表格 ${spreadsheetId}`);
-      }
-    }
-    
-    // 更新控制台数据
-    dashboardSheet.getRange(3, 2).setValue(todayVisits);
-    dashboardSheet.getRange(4, 2).setValue(totalVisits);
-    dashboardSheet.getRange(5, 2).setValue(totalAdGuides);
-    dashboardSheet.getRange(6, 2).setValue(activeDays);
-    dashboardSheet.getRange(7, 2).setValue(activeDays > 0 ? Math.round(totalVisits / activeDays) : 0);
-    
-    const updateTime = getTimeString();
-    dashboardSheet.getRange(3, 3).setValue(updateTime);
-    dashboardSheet.getRange(4, 3).setValue(updateTime);
-  } catch (error) {
-    console.error('更新主控制台失败:', error);
-  }
-}
-
-/**
- * 初始化主控制台
- */
-function initializeMainDashboard(sheet) {
-  sheet.getRange(1, 1, 1, 4).merge();
-  sheet.getRange(1, 1).setValue('📊 网站访问统计总控制台');
-  sheet.getRange(1, 1).setBackground('#1a73e8').setFontColor('white').setFontSize(14).setFontWeight('bold');
+function getOrCreateAdGuideSheet(spreadsheet, dateString) {
+  const sheetName = `广告引导-${dateString}`;
+  console.log('尝试获取/创建 Sheet:', sheetName);
   
-  const headers = [
-    ['统计项目', '数值', '最后更新', '说明'],
-    ['今日访问量', 0, '', '今天的访问次数'],
-    ['总访问量', 0, '', '所有记录的总访问量'],
-    ['总广告引导', 0, '', '所有广告引导触发次数'],
-    ['活跃天数', 0, '', '有访问记录的天数'],
-    ['平均日访问', 0, '', '每日平均访问量']
+  let sheet = spreadsheet.getSheetByName(sheetName);
+  
+  if (!sheet) {
+    console.log('Sheet 不存在，开始创建新 Sheet');
+    sheet = spreadsheet.insertSheet(sheetName);
+    
+    sheet.getRange(1, 1, 1, 9).setValues([
+      ['时间', '访问页面', '用户属性', 'IP地址', '累计广告数', '当前页广告数', '触发次数', '最大触发次数', '事件时间戳']
+    ]);
+    
+    const headerRange = sheet.getRange(1, 1, 1, 9);
+    headerRange.setBackground('#FF6B6B').setFontColor('white').setFontWeight('bold');
+    
+    sheet.setColumnWidth(1, 150);
+    sheet.setColumnWidth(2, 300);
+    sheet.setColumnWidth(3, 200);
+    sheet.setColumnWidth(4, 120);
+    sheet.setColumnWidth(5, 100);
+    sheet.setColumnWidth(6, 120);
+    sheet.setColumnWidth(7, 100);
+    sheet.setColumnWidth(8, 120);
+    sheet.setColumnWidth(9, 180);
+    
+    console.log('✅ 新 Sheet 创建完成');
+  } else {
+    console.log('Sheet 已存在，使用现有 Sheet');
+  }
+  
+  return sheet;
+}
+
+// ==================== 页面访问事件处理 ====================
+
+function handlePageVisitEvent(spreadsheet, data) {
+  const dateString = getDateString();
+  const todaySheet = getOrCreateDailySheet(spreadsheet, dateString);
+  
+  const rowData = [
+    getTimeString(),              // 时间
+    data.page || '',              // 访问页面
+    data.userAgent || '',         // 用户属性
+    data.userIP || 'Unknown'      // IP地址
   ];
   
-  sheet.getRange(2, 1, headers.length, 4).setValues(headers);
-  sheet.getRange(2, 1, 1, 4).setBackground('#4285f4').setFontColor('white').setFontWeight('bold');
+  todaySheet.appendRow(rowData);
   
-  sheet.setColumnWidth(1, 150);
-  sheet.setColumnWidth(2, 100);
-  sheet.setColumnWidth(3, 180);
-  sheet.setColumnWidth(4, 250);
+  // 1%概率执行统计更新
+  if (Math.random() < 0.01) {
+    updateDashboard(spreadsheet, dateString);
+    cleanupOldSheets(spreadsheet);
+    updateStatisticsTable(spreadsheet);
+  }
+}
+
+function getOrCreateDailySheet(spreadsheet, dateString) {
+  const sheetName = `详细-${dateString}`;
+  let sheet = spreadsheet.getSheetByName(sheetName);
+  
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(sheetName);
+    sheet.getRange(1, 1, 1, 4).setValues([
+      ['时间', '访问页面', '用户属性', 'IP地址']
+    ]);
+    
+    const headerRange = sheet.getRange(1, 1, 1, 4);
+    headerRange.setBackground('#4285f4').setFontColor('white').setFontWeight('bold');
+  }
+  
+  return sheet;
 }
 
 // ==================== 工具函数 ====================
@@ -519,115 +163,272 @@ function getTimeString() {
   });
 }
 
-// ==================== 测试和手动触发函数 ====================
+// ==================== 控制台统计 ====================
 
-function testCreateDailySpreadsheet() {
-  const dateString = getDateString();
-  const spreadsheet = getOrCreateDailySpreadsheet(dateString);
-  return '测试成功！表格URL: ' + spreadsheet.getUrl();
-}
-
-function manualUpdateDashboard() {
-  updateMainDashboard();
-  return '主控制台更新完成';
-}
-
-/**
- * 定期清理索引中的重复记录（按表格ID去重，每个表格ID只保留第一条）
- * 自动运行：0.5%概率（平均每200次请求清理一次）
- */
-function cleanupDuplicateIndexRecords() {
+function updateDashboard(spreadsheet, currentDate) {
   try {
-    const mainSpreadsheet = SpreadsheetApp.openById(MAIN_SPREADSHEET_ID);
-    const indexSheet = mainSpreadsheet.getSheetByName('📑表格索引');
-    
-    if (!indexSheet) {
-      console.log('找不到索引表');
-      return '找不到索引表';
+    let dashboardSheet = spreadsheet.getSheetByName('📊控制台');
+    if (!dashboardSheet) {
+      dashboardSheet = spreadsheet.insertSheet('📊控制台', 0);
+      initializeDashboard(dashboardSheet);
     }
     
-    const data = indexSheet.getDataRange().getValues();
-    const seen = new Map(); // 表格ID -> 第一次出现的行号
-    const rowsToDelete = [];
-    
-    // 从第1行开始检查（兼容有无表头的情况）
-    for (let i = 0; i < data.length; i++) {
-      const dateString = data[i][0];
-      const spreadsheetId = data[i][1]; // 第2列是表格ID
-      
-      // 跳过表头行（包含"日期"或"表格ID"文字的）
-      if (dateString === '日期' || dateString === 'Date' || spreadsheetId === '表格ID') {
-        continue;
-      }
-      
-      // 跳过空行
-      if (!spreadsheetId) {
-        rowsToDelete.push(i + 1);
-        continue;
-      }
-      
-      if (seen.has(spreadsheetId)) {
-        // 已经有这个表格ID了，标记删除
-        rowsToDelete.push(i + 1);
-        console.log(`发现重复表格ID: ${spreadsheetId} (日期:${dateString}, 行${i + 1})`);
-      } else {
-        // 第一次见到这个表格ID，保留
-        seen.set(spreadsheetId, i + 1);
-      }
+    const todaySheet = spreadsheet.getSheetByName(`详细-${currentDate}`);
+    if (todaySheet) {
+      const rowCount = Math.max(0, todaySheet.getDataRange().getNumRows() - 1);
+      dashboardSheet.getRange(2, 2).setValue(rowCount);
+      dashboardSheet.getRange(2, 3).setValue(new Date());
     }
     
-    // 从后往前删除（避免行号变化）
-    rowsToDelete.reverse();
-    let deletedCount = 0;
-    for (const row of rowsToDelete) {
-      try {
-        indexSheet.deleteRow(row);
-        deletedCount++;
-      } catch (e) {
-        console.error(`删除行${row}失败:`, e);
-      }
-    }
-    
-    const message = `清理完成！删除了 ${deletedCount} 条重复索引（按表格ID去重），保留了 ${seen.size} 条唯一表格`;
-    console.log(message);
-    return message;
-    
+    updateTotalStats(spreadsheet, dashboardSheet);
   } catch (error) {
-    console.error('清理索引失败:', error);
-    return '清理失败: ' + error.toString();
+    console.error('更新控制台失败:', error);
   }
 }
 
-/**
- * 手动立即清理重复索引（处理大量重复时使用）
- */
-function manualCleanupDuplicates() {
-  return cleanupDuplicateIndexRecords();
+function initializeDashboard(sheet) {
+  sheet.getRange(1, 1, 1, 5).merge();
+  sheet.getRange(1, 1).setValue('📊 网站访问统计控制台');
+  
+  const headers = [
+    ['统计项目', '数值', '最后更新', '说明', ''],
+    ['今日访问量', 0, '', '当天的访问次数', ''],
+    ['总访问量', 0, '', '所有详细记录的总数', ''],
+    ['活跃天数', 0, '', '有访问记录的天数', ''],
+    ['平均日访问', 0, '', '每日平均访问量', '']
+  ];
+  
+  sheet.getRange(2, 1, headers.length, 5).setValues(headers);
+  sheet.getRange(1, 1).setBackground('#1a73e8').setFontColor('white').setFontSize(14).setFontWeight('bold');
+  sheet.getRange(2, 1, 1, 5).setBackground('#4285f4').setFontColor('white').setFontWeight('bold');
 }
 
-function testPageVisit() {
-  const testData = {
-    eventType: 'page_visit',
-    page: 'https://www.arknovel1.xyz/novels/test/chapter-1',
-    userAgent: 'Mozilla/5.0 (iPhone; Test)',
-    referrer: 'Organic: Google Search',
-    referrerUrl: 'https://www.google.com/search?q=werewolf+novels',
-    userIP: '127.0.0.1'
-  };
+function updateTotalStats(spreadsheet, dashboardSheet) {
+  const sheets = spreadsheet.getSheets();
+  let totalVisits = 0;
+  let activeDays = 0;
   
-  const dateString = getDateString();
-  const dailySpreadsheet = getOrCreateDailySpreadsheet(dateString);
-  handlePageVisitEvent(dailySpreadsheet, testData);
+  sheets.forEach(sheet => {
+    const sheetName = sheet.getName();
+    if (sheetName.startsWith('详细-')) {
+      const rowCount = Math.max(0, sheet.getDataRange().getNumRows() - 1);
+      totalVisits += rowCount;
+      if (rowCount > 0) activeDays++;
+    }
+  });
   
-  return '测试数据已写入: ' + dailySpreadsheet.getUrl();
+  dashboardSheet.getRange(3, 2).setValue(totalVisits);
+  dashboardSheet.getRange(4, 2).setValue(activeDays);
+  dashboardSheet.getRange(5, 2).setValue(activeDays > 0 ? Math.round(totalVisits / activeDays) : 0);
+  
+  const updateTime = new Date();
+  dashboardSheet.getRange(3, 3).setValue(updateTime);
+  dashboardSheet.getRange(4, 3).setValue(updateTime);
+  dashboardSheet.getRange(5, 3).setValue(updateTime);
 }
 
-function testAdGuide() {
+// ==================== 数据清理 ====================
+
+function cleanupOldSheets(spreadsheet) {
+  try {
+    const sheets = spreadsheet.getSheets();
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - 2); // 改为2天清理
+    
+    sheets.forEach(sheet => {
+      const sheetName = sheet.getName();
+      if (sheetName.startsWith('详细-') || sheetName.startsWith('广告引导-')) {
+        const dateStr = sheetName.replace('详细-', '').replace('广告引导-', '');
+        const sheetDate = new Date(dateStr);
+        
+        if (sheetDate < cutoffDate) {
+          console.log(`删除过期数据表: ${sheetName}`);
+          spreadsheet.deleteSheet(sheet);
+        }
+      }
+    });
+  } catch (error) {
+    console.error('清理旧数据失败:', error);
+  }
+}
+
+function manualCleanup() {
+  const spreadsheet = SpreadsheetApp.openById('1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4');
+  cleanupOldSheets(spreadsheet);
+  updateDashboard(spreadsheet, getDateString());
+  return '数据清理完成';
+}
+
+// ==================== 统计汇总表 ====================
+
+function updateStatisticsTable(spreadsheet) {
+  try {
+    let statsSheet = spreadsheet.getSheetByName('📈统计汇总表');
+    if (!statsSheet) {
+      statsSheet = spreadsheet.insertSheet('📈统计汇总表', 1);
+      initializeStatisticsTable(statsSheet);
+    }
+    
+    const today = new Date().toLocaleDateString('zh-CN', {
+      timeZone: 'Asia/Shanghai',
+      month: 'numeric',
+      day: 'numeric'
+    });
+    const todayLabel = `${today.split('/')[0]}月${today.split('/')[1]}日`;
+    const todayStats = generateDailyStatistics(spreadsheet, todayLabel);
+    
+    updateStatsInTable(statsSheet, todayStats, todayLabel);
+  } catch (error) {
+    console.error('更新统计汇总表失败:', error);
+  }
+}
+
+function initializeStatisticsTable(sheet) {
+  sheet.getRange(1, 1, 1, 5).merge();
+  sheet.getRange(1, 1).setValue('📈 网站访问统计汇总表');
+  
+  sheet.getRange(2, 1, 1, 5).setValues([
+    ['时间', '域名来源', '书籍名称', '累计章节', '累计IP数量（去重）']
+  ]);
+  
+  sheet.getRange(1, 1).setBackground('#1a73e8').setFontColor('white').setFontSize(14).setFontWeight('bold');
+  sheet.getRange(2, 1, 1, 5).setBackground('#4285f4').setFontColor('white').setFontWeight('bold');
+  
+  sheet.setColumnWidth(1, 100);
+  sheet.setColumnWidth(2, 200);
+  sheet.setColumnWidth(3, 300);
+  sheet.setColumnWidth(4, 150);
+  sheet.setColumnWidth(5, 120);
+}
+
+function generateDailyStatistics(spreadsheet, dateLabel) {
+  const todaySheetName = `详细-${getDateString()}`;
+  const todaySheet = spreadsheet.getSheetByName(todaySheetName);
+  
+  if (!todaySheet) {
+    console.log('未找到今日数据表:', todaySheetName);
+    return [];
+  }
+  
+  const stats = {};
+  const values = todaySheet.getDataRange().getValues();
+  
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i];
+    const pageUrl = row[1] || '';
+    const userIP = row[3] || '';
+    
+    if (!pageUrl || !userIP) continue;
+    
+    const urlInfo = parsePageUrl(pageUrl);
+    if (!urlInfo) continue;
+    
+    const { domain, bookName, isChapter } = urlInfo;
+    const key = `${domain}|${bookName}`;
+    
+    if (!stats[key]) {
+      stats[key] = {
+        domain: domain,
+        bookName: bookName,
+        chapterCount: 0,
+        ipSet: new Set()
+      };
+    }
+    
+    if (isChapter) {
+      stats[key].chapterCount++;
+    }
+    
+    if (userIP && userIP !== 'Unknown' && userIP !== 'Error') {
+      stats[key].ipSet.add(userIP);
+    }
+  }
+  
+  const result = [];
+  for (const key in stats) {
+    const stat = stats[key];
+    result.push([
+      dateLabel,
+      stat.domain,
+      stat.bookName,
+      stat.chapterCount,
+      stat.ipSet.size
+    ]);
+  }
+  
+  return result;
+}
+
+function parsePageUrl(url) {
+  try {
+    const urlObj = new URL(url);
+    const domain = urlObj.hostname;
+    const path = urlObj.pathname;
+    
+    const novelMatch = path.match(/\/novels\/([^\/]+)/);
+    if (!novelMatch) return null;
+    
+    const bookName = novelMatch[1];
+    const isChapter = path.includes('/chapter-');
+    
+    return { domain, bookName, isChapter };
+  } catch (error) {
+    console.error('URL解析失败:', url, error);
+    return null;
+  }
+}
+
+function updateStatsInTable(sheet, newStats, dateLabel) {
+  if (!newStats || newStats.length === 0) {
+    console.log('没有新的统计数据需要更新');
+    return;
+  }
+  
+  const dataRange = sheet.getDataRange();
+  const existingData = dataRange.getNumRows() > 2 ? dataRange.getValues().slice(2) : [];
+  const nonTodayData = existingData.filter(row => row[0] !== dateLabel);
+  const allData = [...nonTodayData, ...newStats];
+  
+  if (dataRange.getNumRows() > 2) {
+    sheet.getRange(3, 1, dataRange.getNumRows() - 2, 5).clear();
+  }
+  
+  if (allData.length > 0) {
+    sheet.getRange(3, 1, allData.length, 5).setValues(allData);
+  }
+  
+  const lastRow = sheet.getLastRow() + 2;
+  sheet.getRange(lastRow, 1, 1, 5).merge();
+  sheet.getRange(lastRow, 1).setValue(`最后更新时间: ${getTimeString()}`);
+  sheet.getRange(lastRow, 1).setFontStyle('italic').setFontColor('#666666');
+  
+  console.log(`统计表更新完成，共 ${allData.length} 条记录`);
+}
+
+function hourlyStatisticsUpdate() {
+  const spreadsheet = SpreadsheetApp.openById('1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4');
+  updateStatisticsTable(spreadsheet);
+  return '每小时统计更新完成';
+}
+
+function manualStatisticsUpdate() {
+  const spreadsheet = SpreadsheetApp.openById('1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4');
+  updateStatisticsTable(spreadsheet);
+  return '手动统计更新完成';
+}
+
+// ==================== 测试函数 ====================
+
+function testAdGuideEvent() {
+  console.log('=== 开始测试广告引导事件 ===');
+  
+  const spreadsheet = SpreadsheetApp.openById('1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4');
+  
   const testData = {
     eventType: 'ad_guide_triggered',
-    page: 'https://www.arknovel1.xyz/novels/test/chapter-1',
+    page: 'https://re.cankalp.com/novels/test/chapter-1',
     userAgent: 'Mozilla/5.0 (iPhone; Test)',
-    referrer: 'https://www.arknovel1.xyz/novels/test/index',
+    referrer: 'https://re.cankalp.com/novels/test/index',
     userIP: '127.0.0.1',
     totalAdsSeen: 15,
     currentPageAds: 3,
@@ -636,135 +437,445 @@ function testAdGuide() {
     timestamp: new Date().toISOString()
   };
   
+  console.log('测试数据:', JSON.stringify(testData));
+  
+  try {
+    handleAdGuideEvent(spreadsheet, testData);
+    console.log('✅ 测试成功！');
+    return '测试成功 - 请检查 Google Sheets 中的"广告引导-' + getDateString() + '"表格';
+  } catch (error) {
+    console.error('❌ 测试失败:', error);
+    return '测试失败: ' + error.toString();
+  }
+}
+
+// ==================== 每日邮件发送 ====================
+
+/**
+ * 每天北京时间01:00发送表格到指定邮箱
+ * 需要在Google Apps Script中设置触发器：每天01:00-02:00执行
+ */
+function sendDailyReport() {
+  try {
+    console.log('=== 开始执行每日报告发送 ===');
+    const spreadsheet = SpreadsheetApp.openById('1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4');
+    const recipientEmail = 'jannatjahan36487@gmail.com';
+    
+    // 生成报告内容
+    const reportContent = generateDailyReportContent(spreadsheet);
+    
+    // 生成Excel附件
+    const excelBlob = generateExcelReport(spreadsheet);
+    
+    // 发送邮件
+    const subject = `📊 网站访问统计日报 - ${getDateString()}`;
+    const body = reportContent.text;
+    const htmlBody = reportContent.html;
+    
+    MailApp.sendEmail({
+      to: recipientEmail,
+      subject: subject,
+      body: body,
+      htmlBody: htmlBody,
+      attachments: [excelBlob]
+    });
+    
+    console.log('✅ 每日报告已发送至:', recipientEmail);
+    return '每日报告发送成功';
+  } catch (error) {
+    console.error('❌ 发送每日报告失败:', error);
+    console.error('Error stack:', error.stack);
+    return '发送失败: ' + error.toString();
+  }
+}
+
+/**
+ * 生成每日报告内容
+ */
+function generateDailyReportContent(spreadsheet) {
   const dateString = getDateString();
-  const dailySpreadsheet = getOrCreateDailySpreadsheet(dateString);
-  handleAdGuideEvent(dailySpreadsheet, testData);
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterdayString = yesterdayDate.toLocaleDateString('zh-CN', {
+    timeZone: 'Asia/Shanghai',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).replace(/\//g, '-');
   
-  return '测试数据已写入: ' + dailySpreadsheet.getUrl();
-}
-
-// ==================== 广告点击监控函数 ====================
-
-/**
- * 处理广告点击事件
- */
-function handleAdClickEvent(dailySpreadsheet, data) {
-  // 确保广告点击工作表存在
-  let adClickSheet = dailySpreadsheet.getSheetByName('广告点击');
+  // 获取控制台数据
+  const dashboardSheet = spreadsheet.getSheetByName('📊控制台');
+  let todayVisits = 0;
+  let totalVisits = 0;
+  let activeDays = 0;
   
-  if (!adClickSheet) {
-    console.log('广告点击工作表不存在，正在创建...');
-    adClickSheet = addAdClickSheetToExisting(dailySpreadsheet);
+  if (dashboardSheet) {
+    todayVisits = dashboardSheet.getRange(2, 2).getValue() || 0;
+    totalVisits = dashboardSheet.getRange(3, 2).getValue() || 0;
+    activeDays = dashboardSheet.getRange(4, 2).getValue() || 0;
   }
   
-  // 解析设备信息
-  const deviceType = getDeviceType(data.userAgent);
-  
-  const rowData = [
-    getTimeString(),                    // 时间
-    data.novel || '',                   // 小说标题
-    data.chapter || '',                 // 章节号
-    data.pageUrl || '',                 // 页面URL
-    data.adSlot || '',                  // 广告位ID
-    data.adPosition || '',              // 广告位置(px)
-    data.scrollDepth || '',             // 滚动深度
-    data.userIP || 'Unknown',           // IP地址
-    deviceType,                         // 设备类型
-    data.screenSize || '',              // 屏幕尺寸
-    data.stayDuration || 0,             // 停留时长(秒)
-    data.totalClickCount || 0,          // 历史累计点击次数
-    data.clickSource || 'normal'        // 点击来源
-  ];
-  
-  adClickSheet.appendRow(rowData);
-  
-  // 5%概率更新当日统计
-  if (Math.random() < 0.05) {
-    updateDailySummary(dailySpreadsheet);
-  }
-}
-
-/**
- * 为现有的每日表格添加"广告点击"工作表（如果不存在）
- */
-function addAdClickSheetToExisting(spreadsheet) {
-  let adClickSheet = spreadsheet.getSheetByName('广告点击');
-  
-  if (adClickSheet) {
-    console.log('广告点击工作表已存在');
-    return adClickSheet;
+  // 获取昨日统计数据
+  const yesterdaySheet = spreadsheet.getSheetByName(`详细-${yesterdayString}`);
+  let yesterdayVisits = 0;
+  if (yesterdaySheet) {
+    yesterdayVisits = Math.max(0, yesterdaySheet.getDataRange().getNumRows() - 1);
   }
   
-  // 创建新的广告点击工作表
-  adClickSheet = spreadsheet.insertSheet('广告点击');
-  adClickSheet.getRange(1, 1, 1, 13).setValues([
-    ['时间', '小说标题', '章节号', '页面URL', '广告位ID', '广告位置(px)', '滚动深度', '用户IP', '设备类型', '屏幕尺寸', '停留时长(秒)', '历史累计点击', '点击来源']
-  ]);
-  
-  const adClickHeader = adClickSheet.getRange(1, 1, 1, 13);
-  adClickHeader.setBackground('#34A853').setFontColor('white').setFontWeight('bold');
-  
-  adClickSheet.setColumnWidth(1, 150);   // 时间
-  adClickSheet.setColumnWidth(2, 200);   // 小说标题
-  adClickSheet.setColumnWidth(3, 80);    // 章节号
-  adClickSheet.setColumnWidth(4, 300);   // 页面URL
-  adClickSheet.setColumnWidth(5, 120);   // 广告位ID
-  adClickSheet.setColumnWidth(6, 100);   // 广告位置
-  adClickSheet.setColumnWidth(7, 100);   // 滚动深度
-  adClickSheet.setColumnWidth(8, 120);   // IP地址
-  adClickSheet.setColumnWidth(9, 100);   // 设备类型
-  adClickSheet.setColumnWidth(10, 120);  // 屏幕尺寸
-  adClickSheet.setColumnWidth(11, 100);  // 停留时长
-  adClickSheet.setColumnWidth(12, 120);  // 历史累计点击
-  adClickSheet.setColumnWidth(13, 120);  // 点击来源
-  
-  console.log('成功创建广告点击工作表');
-  return adClickSheet;
-}
-
-/**
- * 获取设备类型
- */
-function getDeviceType(userAgent) {
-  if (!userAgent) return 'Unknown';
-  
-  if (/mobile/i.test(userAgent)) {
-    if (/iphone/i.test(userAgent)) return 'iPhone';
-    if (/android/i.test(userAgent)) return 'Android';
-    return 'Mobile';
+  // 获取广告引导数据
+  const adGuideSheet = spreadsheet.getSheetByName(`广告引导-${dateString}`);
+  let adGuideTriggers = 0;
+  if (adGuideSheet) {
+    adGuideTriggers = Math.max(0, adGuideSheet.getDataRange().getNumRows() - 1);
   }
-  if (/tablet|ipad/i.test(userAgent)) return 'Tablet';
-  return 'Desktop';
-}
+  
+  // 获取统计汇总数据
+  const statsSheet = spreadsheet.getSheetByName('📈统计汇总表');
+  let topBooks = [];
+  if (statsSheet && statsSheet.getLastRow() > 2) {
+    const statsData = statsSheet.getRange(3, 1, statsSheet.getLastRow() - 2, 5).getValues();
+    const todayStats = statsData.filter(row => row[0].includes(getDateString().split('-')[1] + '月'));
+    topBooks = todayStats.sort((a, b) => b[3] - a[3]).slice(0, 5);
+  }
+  
+  // 生成纯文本报告
+  const textReport = `
+📊 网站访问统计日报
+==================
 
-/**
- * 测试广告点击事件
- */
-function testAdClick() {
-  const testData = {
-    eventType: 'ad_click',
-    novel: 'Test Novel',
-    chapter: '1',
-    pageUrl: 'https://www.arknovel1.xyz/novels/test/chapter-1',
-    adSlot: 'div-gpt-ad-1762511964282-0',
-    adPosition: '850',
-    scrollDepth: '500',
-    userIP: '127.0.0.1',
-    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
-    screenSize: '390x844',
-    stayDuration: 45,
-    totalClickCount: 5,
-    clickSource: 'return_50s',
-    timestamp: new Date().toISOString()
+📅 报告日期：${dateString}
+⏰ 生成时间：${getTimeString()}
+
+📈 核心数据
+----------------
+🔹 今日访问量：${todayVisits} 次
+🔹 昨日访问量：${yesterdayVisits} 次
+🔹 总访问量：${totalVisits} 次
+🔹 活跃天数：${activeDays} 天
+🔹 平均日访问：${activeDays > 0 ? Math.round(totalVisits / activeDays) : 0} 次
+
+🎯 广告引导数据
+----------------
+🔹 今日触发次数：${adGuideTriggers} 次
+
+📚 今日热门书籍 TOP 5
+----------------
+${topBooks.length > 0 ? topBooks.map((book, index) => 
+  `${index + 1}. ${book[2]} - ${book[3]} 章节`).join('\n') : '暂无数据'}
+
+---
+📧 本邮件由系统自动发送
+🔗 查看完整数据：https://docs.google.com/spreadsheets/d/1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4
+  `;
+  
+  // 生成HTML报告
+  const htmlReport = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #4285f4;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #4285f4;
+      margin: 0;
+      font-size: 28px;
+    }
+    .header p {
+      color: #666;
+      margin: 10px 0 0 0;
+    }
+    .section {
+      margin: 25px 0;
+    }
+    .section-title {
+      color: #4285f4;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 5px;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .book-list {
+      list-style: none;
+      padding: 0;
+    }
+    .book-item {
+      background: #f8f9fa;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border-left: 4px solid #4285f4;
+    }
+    .book-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 16px;
+    }
+    .book-stats {
+      color: #666;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      color: #666;
+      font-size: 14px;
+    }
+    .footer a {
+      color: #4285f4;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📊 网站访问统计日报</h1>
+      <p>📅 ${dateString} | ⏰ ${getTimeString()}</p>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">📈 核心数据</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">今日访问量</div>
+          <div class="stat-value">${todayVisits}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">昨日访问量</div>
+          <div class="stat-value">${yesterdayVisits}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">总访问量</div>
+          <div class="stat-value">${totalVisits}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">活跃天数</div>
+          <div class="stat-value">${activeDays}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">🎯 广告引导数据</div>
+      <div style="background: #fff3cd; padding: 15px; border-radius: 6px; border-left: 4px solid #ffc107;">
+        <strong>今日触发次数：</strong> ${adGuideTriggers} 次
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">📚 今日热门书籍 TOP 5</div>
+      ${topBooks.length > 0 ? `
+        <ul class="book-list">
+          ${topBooks.map((book, index) => `
+            <li class="book-item">
+              <div class="book-name">${index + 1}. ${book[2]}</div>
+              <div class="book-stats">📖 章节访问：${book[3]} 次 | 👥 独立IP：${book[4]} 个</div>
+            </li>
+          `).join('')}
+        </ul>
+      ` : '<p style="color: #666;">暂无数据</p>'}
+    </div>
+    
+    <div class="footer">
+      <p>📧 本邮件由系统自动发送</p>
+      <p><a href="https://docs.google.com/spreadsheets/d/1kEvOkFHVQ92HK0y7I1-8qEjfzYrwt0DFQWEiVNTqXS4" target="_blank">🔗 查看完整数据表格</a></p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+  
+  return {
+    text: textReport,
+    html: htmlReport
   };
+}
+
+/**
+ * 测试邮件发送功能
+ */
+function testEmailSend() {
+  console.log('=== 开始测试邮件发送 ===');
   
-  const dateString = getDateString();
-  const dailySpreadsheet = getOrCreateDailySpreadsheet(dateString);
-  
-  // 确保广告点击工作表存在
-  addAdClickSheetToExisting(dailySpreadsheet);
-  
-  handleAdClickEvent(dailySpreadsheet, testData);
-  
-  return '测试广告点击数据已写入: ' + dailySpreadsheet.getUrl();
+  try {
+    const result = sendDailyReport();
+    console.log('✅ 测试邮件发送成功！');
+    return '测试成功 - 请检查邮箱 jannatjahan36487@gmail.com';
+  } catch (error) {
+    console.error('❌ 测试邮件发送失败:', error);
+    return '测试失败: ' + error.toString();
+  }
+}
+
+// ==================== Excel附件生成 ====================
+
+/**
+ * 生成Excel格式的统计报告
+ */
+function generateExcelReport(spreadsheet) {
+  try {
+    console.log('=== 开始生成Excel报告 ===');
+    const dateString = getDateString();
+    
+    // 创建一个临时的Spreadsheet用于导出
+    const tempSpreadsheet = SpreadsheetApp.create(`统计报告-${dateString}`);
+    const tempId = tempSpreadsheet.getId();
+    
+    // 获取所有sheet并复制相关的数据表
+    const allSheets = spreadsheet.getSheets();
+    const sheetsToCopy = ['📊控制台', '📈统计汇总表'];
+    
+    // 添加所有详细数据和广告引导数据sheet
+    allSheets.forEach(sheet => {
+      const sheetName = sheet.getName();
+      if (sheetName.startsWith('详细-') || sheetName.startsWith('广告引导-')) {
+        sheetsToCopy.push(sheetName);
+      }
+    });
+    
+    // 复制所有相关sheet到临时表格
+    sheetsToCopy.forEach(sheetName => {
+      copySheetToSpreadsheet(spreadsheet, tempSpreadsheet, sheetName);
+    });
+    
+    // 删除默认的Sheet1
+    const defaultSheet = tempSpreadsheet.getSheetByName('Sheet1');
+    if (defaultSheet) {
+      tempSpreadsheet.deleteSheet(defaultSheet);
+    }
+    
+    // 将临时Spreadsheet导出为Excel格式
+    const url = `https://docs.google.com/spreadsheets/d/${tempId}/export?format=xlsx`;
+    const token = ScriptApp.getOAuthToken();
+    const response = UrlFetchApp.fetch(url, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    
+    const excelBlob = response.getBlob();
+    excelBlob.setName(`网站统计报告-${dateString}.xlsx`);
+    
+    // 删除临时Spreadsheet
+    DriveApp.getFileById(tempId).setTrashed(true);
+    
+    console.log('✅ Excel报告生成完成');
+    return excelBlob;
+    
+  } catch (error) {
+    console.error('❌ 生成Excel报告失败:', error);
+    throw error;
+  }
+}
+
+/**
+ * 复制Sheet到另一个Spreadsheet
+ */
+function copySheetToSpreadsheet(sourceSpreadsheet, targetSpreadsheet, sheetName) {
+  try {
+    const sourceSheet = sourceSpreadsheet.getSheetByName(sheetName);
+    
+    if (!sourceSheet) {
+      console.log(`Sheet不存在，跳过: ${sheetName}`);
+      return;
+    }
+    
+    // 在目标表格中创建新Sheet
+    const newSheet = targetSpreadsheet.insertSheet(sheetName);
+    
+    // 获取源Sheet的所有数据
+    const sourceRange = sourceSheet.getDataRange();
+    const sourceValues = sourceRange.getValues();
+    const sourceFormats = sourceRange.getNumberFormats();
+    
+    // 复制数据
+    if (sourceValues.length > 0 && sourceValues[0].length > 0) {
+      const targetRange = newSheet.getRange(1, 1, sourceValues.length, sourceValues[0].length);
+      targetRange.setValues(sourceValues);
+      targetRange.setNumberFormats(sourceFormats);
+    }
+    
+    // 复制列宽
+    for (let i = 1; i <= sourceSheet.getMaxColumns(); i++) {
+      const columnWidth = sourceSheet.getColumnWidth(i);
+      newSheet.setColumnWidth(i, columnWidth);
+    }
+    
+    // 复制格式（背景色、字体等）
+    const lastRow = sourceSheet.getLastRow();
+    const lastColumn = sourceSheet.getLastColumn();
+    
+    if (lastRow > 0 && lastColumn > 0) {
+      const sourceFormatRange = sourceSheet.getRange(1, 1, lastRow, lastColumn);
+      const targetFormatRange = newSheet.getRange(1, 1, lastRow, lastColumn);
+      
+      // 复制背景色
+      targetFormatRange.setBackgrounds(sourceFormatRange.getBackgrounds());
+      
+      // 复制字体颜色
+      targetFormatRange.setFontColors(sourceFormatRange.getFontColors());
+      
+      // 复制字体大小
+      targetFormatRange.setFontSizes(sourceFormatRange.getFontSizes());
+      
+      // 复制字体粗细
+      targetFormatRange.setFontWeights(sourceFormatRange.getFontWeights());
+      
+      // 复制字体样式
+      targetFormatRange.setFontStyles(sourceFormatRange.getFontStyles());
+    }
+    
+    console.log(`✅ 成功复制Sheet: ${sheetName}`);
+    
+  } catch (error) {
+    console.error(`复制Sheet失败 (${sheetName}):`, error);
+  }
 }
