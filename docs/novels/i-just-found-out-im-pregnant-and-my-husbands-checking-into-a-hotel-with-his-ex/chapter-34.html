@@ -15,11 +15,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- 渠道监控 -->
-    <script async src="https://sdk.glonv.com/publisher/novel.hivesilent.com/sb_ad.js"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1568346559765682"
-     crossorigin="anonymous"></script>
+    <script async src="https://sdk.glonv.com/publisher/novel.himeao.com/sb_ad.js"></script>
     
-    <!-- AB Version Detection & Redirect System -->
+    <!-- AB Version Detection & Redirect System - DISABLED -->
+    <!--
     <script>
     (function() {
         'use strict';
@@ -137,6 +136,7 @@
         initVersionDetection();
     })();
     </script>
+    -->
     
     <title>Chapter 32 - I just found out I’m pregnant and my husband’s checking into a hotel with his ex | NovelVibe</title>
     <meta name="description" content="Read I just found out I’m pregnant and my husband’s checking into a hotel with his ex Chapter 34 on NovelVibe - Free werewolf romance novels">
@@ -144,17 +144,17 @@
     
     <!-- Time Meta Tags for SEO -->
     
-    <meta property="article:published_time" content="2026-03-04T16:14:57.579400">
-    <meta property="article:modified_time" content="2026-03-04T16:14:57.579400">
-    <meta name="date" content="2026-03-04">
-    <meta name="last-modified" content="2026-03-04 16:14:57">
+    <meta property="article:published_time" content="2026-04-10T14:21:25.050898">
+    <meta property="article:modified_time" content="2026-04-10T14:21:25.050898">
+    <meta name="date" content="2026-04-10">
+    <meta name="last-modified" content="2026-04-10 14:21:25">
     
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Chapter 32">
     <meta property="og:description" content="Read I just found out I’m pregnant and my husband’s checking into a hotel with his ex online for free">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://novel.hivesilent.com/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/chapter-34.html">
+    <meta property="og:url" content="https://novel.himeao.com/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/chapter-34.html">
     <meta property="og:image" content="/covers/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex-封面.png">
     
     <!-- Twitter Card Meta Tags -->
@@ -163,7 +163,7 @@
     <meta name="twitter:description" content="Read I just found out I’m pregnant and my husband’s checking into a hotel with his ex online">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://novel.hivesilent.com/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/chapter-34.html">
+    <link rel="canonical" href="https://novel.himeao.com/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/chapter-34.html">
     
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YKK2QRZ5GC"></script>
@@ -175,7 +175,7 @@
     </script>
     
     <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1568346559765682"
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7770507631296192"
          crossorigin="anonymous"></script>
 
     
@@ -192,11 +192,11 @@
 
     fbq('init', '747225277772713');
     
-    // Natural 72-hour event tracking prevention (resets every 3 days)
+    // Natural 36-hour event tracking prevention (resets every 1.5 days)
     function shouldTrackEvent(eventName) {
         const now = new Date();
-        const threeDaysAgo = new Date(now.getTime() - (3 * 24 * 60 * 60 * 1000));
-        const currentPeriod = Math.floor(now.getTime() / (3 * 24 * 60 * 60 * 1000));
+        const oneDotFiveDaysAgo = new Date(now.getTime() - (1.5 * 24 * 60 * 60 * 1000));
+        const currentPeriod = Math.floor(now.getTime() / (1.5 * 24 * 60 * 60 * 1000));
         const storageKey = `fb_event_${eventName}`;
         const lastTrackedPeriod = localStorage.getItem(storageKey);
         
@@ -208,59 +208,168 @@
         return false;
     }
     
-    // Track PageView with 72-hour prevention
+    // Track PageView with 36-hour prevention
     if (shouldTrackEvent('PageView')) {
         fbq('track', 'PageView');
         console.log('Facebook事件已发送: PageView (页面浏览)');
     } else {
-        console.log('Facebook事件已跳过: PageView (本72小时内已发送)');
+        console.log('Facebook事件已跳过: PageView (本36小时内已发送)');
     }
     
-    // Reading time tracking for Facebook Pixel
-    let readingStartTime = Date.now();
-    let oneMinuteSent = false;
-    let tenMinutesSent = false;
+    // Reading time tracking for Facebook Pixel - with cross-page accumulation
+    const READING_TIME_KEY = 'fb_total_reading_time';
+    const READING_SESSION_KEY = 'fb_reading_session_start';
+    const READING_PERIOD_KEY = 'fb_reading_period'; // Track which 36h period the reading time belongs to
+    const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes timeout
+    
+    // Milestone tracking to prevent duplicate events in same session
+    let milestonesSent = {
+        '3m': false,
+        '5m': false,
+        '10m': false
+    };
+    
+    // Get current 36-hour period
+    function getCurrentPeriod() {
+        return Math.floor(Date.now() / (1.5 * 24 * 60 * 60 * 1000));
+    }
+    
+    // Get accumulated reading time from localStorage
+    function getTotalReadingTime() {
+        const stored = localStorage.getItem(READING_TIME_KEY);
+        return stored ? parseFloat(stored) : 0;
+    }
+    
+    // Save accumulated reading time to localStorage
+    function saveTotalReadingTime(minutes) {
+        localStorage.setItem(READING_TIME_KEY, minutes.toString());
+        localStorage.setItem(READING_PERIOD_KEY, getCurrentPeriod().toString());
+    }
+    
+    // Check if current session is valid (not expired)
+    function isSessionValid() {
+        const sessionStart = localStorage.getItem(READING_SESSION_KEY);
+        if (!sessionStart) return false;
+        
+        const timeSinceSession = Date.now() - parseInt(sessionStart);
+        return timeSinceSession < SESSION_TIMEOUT;
+    }
+    
+    // Check if reading time belongs to current 36-hour period
+    function isReadingTimeValid() {
+        const storedPeriod = localStorage.getItem(READING_PERIOD_KEY);
+        if (!storedPeriod) return false;
+        
+        return parseInt(storedPeriod) === getCurrentPeriod();
+    }
+    
+    // Start or resume reading session
+    function startReadingSession() {
+        localStorage.setItem(READING_SESSION_KEY, Date.now().toString());
+    }
+    
+    // Initialize reading time tracking
+    // Reset if either: 1) session expired, or 2) entered new 36-hour period
+    let accumulatedReadingTime = (isSessionValid() && isReadingTimeValid()) ? getTotalReadingTime() : 0;
+    let pageStartTime = Date.now();
+    let isPageVisible = !document.hidden;
+    
+    startReadingSession();
+    
+    // Check which milestones have already been reached
+    if (accumulatedReadingTime >= 10) {
+        milestonesSent['3m'] = true;
+        milestonesSent['5m'] = true;
+        milestonesSent['10m'] = true;
+    } else if (accumulatedReadingTime >= 5) {
+        milestonesSent['3m'] = true;
+        milestonesSent['5m'] = true;
+    } else if (accumulatedReadingTime >= 3) {
+        milestonesSent['3m'] = true;
+    }
     
     function checkReadingTime() {
-        const currentTime = Date.now();
-        const readingTime = (currentTime - readingStartTime) / 1000 / 60; // in minutes
+        if (!isPageVisible) return; // Don't count time when page is hidden
         
-        if (!oneMinuteSent && readingTime >= 1) {
-            if (shouldTrackEvent('ReadOneMinute')) {
-                fbq('trackCustom', 'ReadOneMinute', {
-                    content_name: 'I just found out I’m pregnant and my husband’s checking into a hotel with his ex',
-                    content_category: 'Novel',
-                    reading_time: 1
-                });
-                console.log('Facebook事件已发送: ReadOneMinute (用户阅读1分钟)');
+        // Calculate time on current page
+        const currentTime = Date.now();
+        const pageTime = (currentTime - pageStartTime) / 1000 / 60; // in minutes
+        
+        // Total accumulated time = previous time + current page time
+        const totalReadingTime = accumulatedReadingTime + pageTime;
+        
+        // Save to localStorage for cross-page persistence
+        saveTotalReadingTime(totalReadingTime);
+        startReadingSession(); // Update session timestamp
+        
+        // Check 3 minutes milestone (only once and if not sent in 36 hours)
+        if (totalReadingTime >= 3 && !milestonesSent['3m']) {
+            if (shouldTrackEvent('3m_web')) {
+                fbq('track', '3m_web');
+                console.log('Facebook事件已发送: 3m_web (累计阅读3分钟)');
+                milestonesSent['3m'] = true;
             } else {
-                console.log('Facebook事件已跳过: ReadOneMinute (本72小时内已发送)');
+                console.log('Facebook事件已跳过: 3m_web (本36小时内已发送)');
+                milestonesSent['3m'] = true; // Mark as sent to prevent retry
             }
-            oneMinuteSent = true;
         }
         
-        if (!tenMinutesSent && readingTime >= 10) {
-            if (shouldTrackEvent('ReadTenMinutes')) {
-                fbq('trackCustom', 'ReadTenMinutes', {
-                    content_name: 'I just found out I’m pregnant and my husband’s checking into a hotel with his ex',
-                    content_category: 'Novel',
-                    reading_time: 10
-                });
-                console.log('Facebook事件已发送: ReadTenMinutes (用户阅读10分钟)');
+        // Check 5 minutes milestone (only once and if not sent in 36 hours)
+        if (totalReadingTime >= 5 && !milestonesSent['5m']) {
+            if (shouldTrackEvent('1m_web')) {
+                fbq('track', '1m_web');
+                console.log('Facebook事件已发送: 1m_web (累计阅读5分钟)');
+                milestonesSent['5m'] = true;
             } else {
-                console.log('Facebook事件已跳过: ReadTenMinutes (本72小时内已发送)');
+                console.log('Facebook事件已跳过: 1m_web (本36小时内已发送)');
+                milestonesSent['5m'] = true; // Mark as sent to prevent retry
             }
-            tenMinutesSent = true;
+        }
+        
+        // Check 10 minutes milestone (only once and if not sent in 36 hours)
+        if (totalReadingTime >= 10 && !milestonesSent['10m']) {
+            if (shouldTrackEvent('10m_web')) {
+                fbq('track', '10m_web');
+                console.log('Facebook事件已发送: 10m_web (累计阅读10分钟)');
+                milestonesSent['10m'] = true;
+            } else {
+                console.log('Facebook事件已跳过: 10m_web (本36小时内已发送)');
+                milestonesSent['10m'] = true; // Mark as sent to prevent retry
+            }
         }
     }
     
     // Check reading time every 30 seconds
     setInterval(checkReadingTime, 30000);
     
-    // Also check when page becomes visible again (in case user switches tabs)
+    // Handle page visibility changes
     document.addEventListener('visibilitychange', function() {
-        if (!document.hidden) {
-            checkReadingTime();
+        if (document.hidden) {
+            // Page hidden - save accumulated time
+            isPageVisible = false;
+            const currentTime = Date.now();
+            const pageTime = (currentTime - pageStartTime) / 1000 / 60;
+            accumulatedReadingTime += pageTime;
+            saveTotalReadingTime(accumulatedReadingTime);
+            console.log(`页面隐藏，保存累计阅读时间: ${accumulatedReadingTime.toFixed(2)}分钟`);
+        } else {
+            // Page visible again - restart timer
+            isPageVisible = true;
+            pageStartTime = Date.now();
+            startReadingSession();
+            // No need to check immediately, will check in next interval
+            console.log(`页面恢复，当前累计阅读时间: ${accumulatedReadingTime.toFixed(2)}分钟`);
+        }
+    });
+    
+    // Save accumulated time before page unload
+    window.addEventListener('beforeunload', function() {
+        if (isPageVisible) {
+            const currentTime = Date.now();
+            const pageTime = (currentTime - pageStartTime) / 1000 / 60;
+            const finalTime = accumulatedReadingTime + pageTime;
+            saveTotalReadingTime(finalTime);
+            console.log(`页面卸载，保存最终累计时间: ${finalTime.toFixed(2)}分钟`);
         }
     });
     </script>
@@ -736,22 +845,22 @@
             "@type": "Person",
             "name": "Unknown Author"
         },
-        "datePublished": "2026-03-04T16:14:57.579400",
-        "dateModified": "2026-03-04T16:14:57.579400",
+        "datePublished": "2026-04-10T14:21:25.050898",
+        "dateModified": "2026-04-10T14:21:25.050898",
         "publisher": {
             "@type": "Organization",
             "name": "NovelVibe",
-            "url": "https://novel.hivesilent.com",
+            "url": "https://novel.himeao.com",
             "logo": {
                 "@type": "ImageObject",
-                "url": "https://novel.hivesilent.com/assets/images/logo.png"
+                "url": "https://novel.himeao.com/assets/images/logo.png"
             }
         },
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://novel.hivesilent.com/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/chapter-34.html"
+            "@id": "https://novel.himeao.com/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/chapter-34.html"
         },
-        "url": "https://novel.hivesilent.com/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/chapter-34.html",
+        "url": "https://novel.himeao.com/novels/i-just-found-out-im-pregnant-and-my-husbands-checking-into-a-hotel-with-his-ex/chapter-34.html",
         
         "image": {
             "@type": "ImageObject",
@@ -802,14 +911,11 @@
                 
                 <p>Vincent pushed his sleeves up to his elbows. He warmed his hands by rubbing them together, and then gently began to work the bruise on Hannah&#39;s waist. His touch was light and careful, never once causing her any pain.</p>
                 
-                <!-- AdSense In-Article Ad after first paragraph -->
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1568346559765682"
-                     crossorigin="anonymous"></script>
-                <!-- novel.hivesilent.com_fb_022801 -->
+                <!-- Ad 1: novel.himeao.com_banner_fb_0410_1 -->
                 <ins class="adsbygoogle"
                      style="display:block"
-                     data-ad-client="ca-pub-1568346559765682"
-                     data-ad-slot="2373730788"
+                     data-ad-client="ca-pub-7770507631296192"
+                     data-ad-slot="7927882084"
                      data-ad-format="auto"
                      data-full-width-responsive="true"></ins>
                 <script>
@@ -819,12 +925,38 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>A thick silence filled the space between them.</p>
                 
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>After a while, Vincent spoke in a low voice. &#34;Brinley isn&#39;t a bad person. She didn&#39;t mean any of this. Don&#39;t hold it against her.&#34;</p>
+                
+                
+                <!-- Ad 2: novel.himeao.com_banner_fb_0410_2 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7770507631296192"
+                     data-ad-slot="4148419171"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                
+                
+                
+                
                 
                 
                 
@@ -834,7 +966,28 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>Hannah pushed herself upright, tilting her chin as she stared at him with a cold smirk. &#34;Vincent, did you miss what just happened, or do you just not want to see it? She started all of this, and now you want me to just let it go? I&#39;m not that forgiving.&#34;</p>
+                
+                
+                
+                <!-- Ad 3: novel.himeao.com_banner_fb_0410_3 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7770507631296192"
+                     data-ad-slot="5168476510"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                
+                
+                
                 
                 
                 
@@ -844,7 +997,28 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>Vincent stayed where he was, pressing his fingers to the bridge of his nose, frustration plain on his face.&#34;You weren&#39;t like this before.&#34;</p>
+                
+                
+                
+                
+                <!-- Ad 4: novel.himeao.com_banner_fb_0410_4 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7770507631296192"
+                     data-ad-slot="1522255837"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                
+                
                 
                 
                 
@@ -854,7 +1028,28 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>Her eyes went frosty. She kicked him away.&#34;Just leave. Go be with your precious Brinley.&#34;</p>
+                
+                
+                
+                
+                
+                <!-- Ad 5: novel.himeao.com_banner_fb_0410_5 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7770507631296192"
+                     data-ad-slot="2542313173"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                
                 
                 
                 
@@ -864,7 +1059,28 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>&#34;I don&#39;t need your help with the ointment. The pain doesn&#39;t bother me.&#34; She turned her head away, the sting from the ointment and the throb in her waist paled in comparison to the ache in her chest. Her heart felt like it was bleeding.</p>
+                
+                
+                
+                
+                
+                
+                <!-- Ad 6: novel.himeao.com_inarticle_fb_0410_1 -->
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-7770507631296192"
+                     data-ad-slot="9209174161"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
                 
                 
                 
@@ -874,7 +1090,17 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>Another heavy silence settled over the room.</p>
+                
+                
+                
+                
+                
                 
                 
                 
@@ -884,7 +1110,17 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>Darkness clouded Vincent&#39;s face. &#34;That&#39;s not happening. Just drop that idea.&#34;</p>
+                
+                
+                
+                
+                
                 
                 
                 
@@ -894,7 +1130,17 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>&#34;You want a divorce that badly?&#34; His gaze pinned her down.</p>
+                
+                
+                
+                
+                
                 
                 
                 
@@ -904,7 +1150,17 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>They had spent five years as husband and wife. For five years, she&#39;d given him everything she had while he&#39;d treated her like a substitute for Brinley. She didn&#39;t want to go on like this anymore.</p>
+                
+                
+                
+                
+                
                 
                 
                 
@@ -914,7 +1170,17 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>Vincent stared at her, emotion flickering in his eyes-fury, disbelief, and something darker. Her eyes burned with quiet resolve, adding to his inner turmoil.</p>
+                
+                
+                
+                
+                
                 
                 
                 
@@ -924,7 +1190,17 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>She gave him a small, empty smile. &#34;Vincent, aren&#39;t you tired by all this?&#34;</p>
+                
+                
+                
+                
+                
                 
                 
                 
@@ -934,7 +1210,17 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>She swallowed her bitterness and added, &#34;If we divorce, you can give Brinley a proper title. That&#39;s better than whatever this mess is.&#34;</p>
+                
+                
+                
+                
+                
                 
                 
                 
@@ -944,12 +1230,27 @@
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>A storm of tension thickened the air.</p>
                 
                 
                 
                 
+                
+                
+                
+                
+                
                 <p>Just then, a knock broke through the heaviness. &#34;Mr. Jones, your meeting is about to start,&#34; Derek remarked from the other side of the door.</p>
+                
+                
+                
+                
+                
                 
                 
                 
@@ -3814,7 +4115,7 @@
                             console.log('Facebook事件已发送: FirstNextClick (首次点击下一章)');
                         }
                     } else {
-                        console.log('Facebook事件已跳过: FirstNextClick (本72小时内已发送)');
+                        console.log('Facebook事件已跳过: FirstNextClick (本36小时内已发送)');
                     }
                     nextClickTracked = true;
                 }
@@ -3843,6 +4144,8 @@
                                 });
                                 console.log('Facebook事件已发送: FirstNextClick (首次点击下一章-键盘)');
                             }
+                        } else {
+                            console.log('Facebook事件已跳过: FirstNextClick (本36小时内已发送)');
                         }
                         nextClickTracked = true;
                     }
@@ -4091,13 +4394,13 @@
                 }
                 
                 // Key point 1: Guide trigger mechanism
-                this.REQUIRED_ADS = this.getOrGenerateRequiredAds(); // Random 3-15 ads, persistent across sessions
-                this.TRIGGER_PROBABILITY = 0.01; // 1% trigger probability
-                this.COOLDOWN_MINUTES = 12; // 12 minutes cooldown time
+                this.REQUIRED_ADS = this.getOrGenerateRequiredAds(); // Random 30-50 ads, persistent across sessions
+                this.TRIGGER_PROBABILITY = 0.80; // 80% trigger probability
+                this.COOLDOWN_MINUTES = 15; // 15 minutes cooldown time
 
                 // New: Trigger count limit mechanism
                 this.MAX_TRIGGERS = 3; // Maximum trigger count limit
-                this.TRIGGER_COOLDOWN_HOURS = 6; // 6 hour cooldown after reaching max triggers
+                this.TRIGGER_COOLDOWN_HOURS = 2; // 2 hour cooldown after reaching max triggers
                 
                 // State management
                 this.currentPageAds = []; // Current page ads
@@ -4163,8 +4466,8 @@
                     return requiredAds;
                 }
                 
-                // First time: generate random number 3-15
-                const randomAds = Math.floor(Math.random() * 13) + 3;
+                // First time: generate random number 30-50
+                const randomAds = Math.floor(Math.random() * 21) + 30;
                 localStorage.setItem('adGuideRequiredAds', randomAds.toString());
                 console.log(`Ad guide: Generated new random ads threshold: ${randomAds}`);
                 return randomAds;

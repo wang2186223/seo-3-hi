@@ -1,10 +1,13 @@
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1568346559765682"
+
+
+novel.himeao.com_banner_fb_0410_1
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7770507631296192"
      crossorigin="anonymous"></script>
-<!-- novel.hivesilent.com_fb_022801 -->
+<!-- novel.himeao.com_banner_fb_0410_1 -->
 <ins class="adsbygoogle"
      style="display:block"
-     data-ad-client="ca-pub-1568346559765682"
-     data-ad-slot="2373730788"
+     data-ad-client="ca-pub-7770507631296192"
+     data-ad-slot="7927882084"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
 <script>
@@ -12,3 +15,75 @@
 </script>
 
 
+novel.himeao.com_banner_fb_0410_2
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7770507631296192"
+     crossorigin="anonymous"></script>
+<!-- novel.himeao.com_banner_fb_0410_2 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7770507631296192"
+     data-ad-slot="4148419171"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+novel.himeao.com_banner_fb_0410_3
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7770507631296192"
+     crossorigin="anonymous"></script>
+<!-- novel.himeao.com_banner_fb_0410_3 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7770507631296192"
+     data-ad-slot="5168476510"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+novel.himeao.com_banner_fb_0410_4
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7770507631296192"
+     crossorigin="anonymous"></script>
+<!-- novel.himeao.com_banner_fb_0410_4 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7770507631296192"
+     data-ad-slot="1522255837"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+novel.himeao.com_banner_fb_0410_5
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7770507631296192"
+     crossorigin="anonymous"></script>
+<!-- novel.himeao.com_banner_fb_0410_5 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7770507631296192"
+     data-ad-slot="2542313173"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+novel.himeao.com_inarticle_fb_0410_1
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7770507631296192"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-7770507631296192"
+     data-ad-slot="9209174161"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
